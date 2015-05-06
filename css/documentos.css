@@ -1,0 +1,249 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+.clearfix:before, .clearfix:after {
+  content: "";
+  display: table; }
+
+.clearfix:after {
+  clear: both; }
+
+.clearfix {
+  *zoom: 1; }
+
+*::-moz-selection {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5); }
+
+*::selection {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5); }
+
+body {
+  font-family: open sans;
+  padding: 0;
+  margin: 0;
+  max-width: 100%; }
+
+a {
+  text-decoration: none; }
+
+a:visited {
+  color: inherit; }
+
+.container {
+  margin: 0 auto;
+  width: 1280px; }
+
+#documento_informe_anual {
+  padding: 0 40px;
+  position: relative; }
+
+#documento_informe_parcial #tabla {
+  max-height: 347px;
+  overflow: hidden; }
+  #documento_informe_parcial #tabla table {
+    margin-top: 10px; }
+    #documento_informe_parcial #tabla table th {
+      text-align: left; }
+#documento_informe_parcial #encabezado #logo {
+  padding: 3px 20px 5px 20px;
+  height: 40px; }
+  #documento_informe_parcial #encabezado #logo img {
+    width: 150px; }
+  #documento_informe_parcial #encabezado #logo #datos_alumno {
+    padding: 6px 20px 0px 20px; }
+#documento_informe_parcial #encabezado #datos hgroup {
+  padding: 3px 20px; }
+  #documento_informe_parcial #encabezado #datos hgroup h1 {
+    font-size: 13px; }
+#documento_informe_parcial #encabezado #datos #ficha {
+  padding: 2px 12px;
+  line-height: 12px; }
+#documento_informe_parcial:nth-child(1) {
+  padding: 0 40px 10px 40px;
+  border-bottom: 1px dashed gray; }
+#documento_informe_parcial:nth-child(2) {
+  padding: 10px 40px 0 40px; }
+
+#documento_nomina_de_alumnos #tabla table {
+  margin-top: 0 !important;
+  width: 100%;
+  font-size: 8px; }
+  #documento_nomina_de_alumnos #tabla table th {
+    background-color: #0098da !important;
+    color: white !important; }
+    #documento_nomina_de_alumnos #tabla table th #logo {
+      display: inline-block;
+      left: 10px;
+      position: absolute;
+      top: 2px;
+      vertical-align: middle;
+      z-index: 2; }
+      #documento_nomina_de_alumnos #tabla table th #logo img {
+        width: 165px; }
+    #documento_nomina_de_alumnos #tabla table th #datos_documento {
+      border-left: 1px solid white;
+      display: inline-block;
+      left: 190px;
+      position: absolute;
+      top: 12px;
+      vertical-align: middle; }
+      #documento_nomina_de_alumnos #tabla table th #datos_documento p {
+        font-size: 10px;
+        font-weight: 900;
+        margin: 0;
+        padding-left: 15px;
+        text-align: left; }
+#documento_nomina_de_alumnos th {
+  height: 50px;
+  padding: 0 !important;
+  border: 1px solid black;
+  overflow: hidden;
+  position: relative; }
+  #documento_nomina_de_alumnos th span {
+    -moz-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    transform: rotate(270deg);
+    bottom: 0;
+    margin: 0;
+    position: absolute;
+    right: 0;
+    text-align: left;
+    top: 50%;
+    transform-origin: 29% -6%; }
+  #documento_nomina_de_alumnos th:before {
+    background: -moz-linear-gradient(top, #0098da 0%, rgba(0, 152, 218, 0) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #0098da), color-stop(100%, rgba(0, 152, 218, 0)));
+    background: -webkit-linear-gradient(top, #0098da 0%, rgba(0, 152, 218, 0) 100%);
+    background: -o-linear-gradient(top, #0098da 0%, rgba(0, 152, 218, 0) 100%);
+    background: -ms-linear-gradient(top, #0098da 0%, rgba(0, 152, 218, 0) 100%);
+    background: linear-gradient(to bottom, #0098da 0%, rgba(0, 152, 218, 0) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0098da', endColorstr='#0098da',GradientType=0 );
+    content: "";
+    display: block;
+    height: 10px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1; }
+#documento_nomina_de_alumnos td {
+  padding: 2px 5px !important; }
+#documento_nomina_de_alumnos #top th,
+#documento_nomina_de_alumnos #top tr {
+  background-color: #0098da; }
+
+#encabezado #logo {
+  -moz-border-radius: 10px 10px 0 0;
+  -webkit-border-radius: 10px;
+  border-radius: 10px 10px 0 0;
+  background-color: #0098da;
+  padding: 10px 20px;
+  position: relative;
+  height: 45px; }
+  #encabezado #logo img {
+    height: auto;
+    width: 165px; }
+#encabezado #datos_alumno {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-left: 1px solid white;
+  height: 100%;
+  padding: 15px;
+  position: absolute;
+  right: 0px;
+  top: 0; }
+  #encabezado #datos_alumno p {
+    color: white;
+    font-size: 12px;
+    font-weight: 900;
+    margin: 0 0 3px 0; }
+#encabezado #datos {
+  -moz-border-radius: 0 0 10px 10px;
+  -webkit-border-radius: 0;
+  border-radius: 0 0 10px 10px;
+  border: 1px solid black;
+  position: relative; }
+  #encabezado #datos hgroup {
+    display: inline-block;
+    padding: 5px 20px; }
+    #encabezado #datos hgroup h1 {
+      font-size: 18px;
+      font-weight: 900;
+      margin: 0; }
+    #encabezado #datos hgroup h2 {
+      font-size: 12px;
+      margin: 0; }
+  #encabezado #datos #ficha {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-left: 1px solid black;
+    display: inline-block;
+    font-size: 10px;
+    height: 100%;
+    padding: 5px 20px;
+    position: absolute;
+    right: 0;
+    top: 0; }
+
+#decreto {
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background-color: #e0e4e8;
+  margin-top: 20px; }
+  #decreto p {
+    font-size: 10px;
+    padding: 20px;
+    margin: 0; }
+
+#tabla table {
+  border: 1px solid black;
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+  font-size: 9px; }
+  #tabla table td,
+  #tabla table th {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px; }
+  #tabla table th {
+    background-color: #e0e4e8; }
+
+#firmas {
+  position: relative;
+  height: 100px;
+  margin-top: 20px; }
+  #firmas .firma {
+    position: absolute;
+    text-align: center; }
+    #firmas .firma figure {
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 60px;
+      margin: 0 auto 10px auto;
+      width: 70px; }
+    #firmas .firma .nombre {
+      font-size: 12px; }
+    #firmas .firma hr {
+      border: 0;
+      border-top: 1px solid black; }
+    #firmas .firma .bajada {
+      font-size: 9px;
+      font-weight: 900; }
+    #firmas .firma:nth-child(1) {
+      left: 0; }
+    #firmas .firma:nth-child(2) {
+      right: 0; }
+
+#fecha {
+  bottom: -50px;
+  font-size: 9px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  text-align: center; }
