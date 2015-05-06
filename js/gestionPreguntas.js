@@ -7,10 +7,10 @@ $(document).ready(function()
 });
 
 function procesarLecturaXML(data){
-		var preguntas="<tr><td>CODE</td><td>Titulo</td><td>Preview</td><td>Eliminar</td><td>Compartir</td></tr>";
+		var preguntas="<tr><th>CODE</th><th>Titulo</th><th>Preview</th><th>Editar</th><th>compartir</th><th>Eliminar</th></tr>";
 		 $.each(data, function(name, info){
 		 	if(name != 'cantidad'){
-		 		preguntas +='<tr> <td>'+name+'</td><td>'+info.dirPreg+'</td><td>'+name+'</td><td>'+name+'</td> </tr>';
+		 		preguntas +='<tr> <td>'+name+'</td><td>'+info.dirPreg+'</td><td><img height="30" width="30" src="images/lupa.png"> </img></td><td><img height="30" width="30" src="images/edit.png"> </img></td> <td><button class="button_azul">Compartir</button></td><td><button class="button_rojo">Eliminar</button></td> </tr>';
 		 	}
 		 	else{
 		 		paginador(info.value);
@@ -34,7 +34,7 @@ function ultimasPaginas(numero,nPag){
 
 function paginador (cant){
 	var htmlPag ='';
-	var nPag= 13; //Math.ceil(cant/15);
+	var nPag= Math.ceil(cant/15);
 	if(paginaActual > 1){
 		htmlPag+='<li class="next"><a href="#"  onClick="llamadaPhpPagina(1);">««</a></li>';
 		htmlPag+= '<li class="previous"><a href="#"  onClick="llamadaPhpPagina('+(paginaActual-1)+');"> «Anterior</a> </li>';

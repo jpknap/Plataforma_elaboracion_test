@@ -1197,8 +1197,17 @@ a:visited {
   cursor: pointer;
   color: white;
   font-size: 14px;
-  padding: 10px;
-  width: 150px; }
+  padding: 10px; }
+.button_azul {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #0099CC ;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  font-size: 14px;
+  padding: 10px; }
   .button_crear img {
     margin-left: 7px; }
 .button_agregar_alternativa {
@@ -1417,11 +1426,12 @@ header#administrador {
         font-weight: 100; }
 
 .tablaAlter {
-  margin-top: 50px;
-  margin-left:20%;padding:0px;
-  width:60%;
-  box-shadow: 5px 5px 2px #888888;
-  border:1px solid #f7efef;
+  padding-top:50px;
+  padding-left:100px;
+  padding-right:100px;
+  width:100%;
+    text-align: center;
+  border:0px solid #f7efef;
   
   -moz-border-radius-bottomleft:0px;
   -webkit-border-bottom-left-radius:0px;
