@@ -11,6 +11,7 @@ $(function() {
 		 $("#seleccionTag").html(codeTags);
 	},'json');
 });
+
 function cargarTag(){
 	ultimoNombreBusqueda=$('#nombreBusquedaTag').val();
 

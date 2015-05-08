@@ -1,16 +1,54 @@
 var paginaActual=1;
+var tituloBuscar='';
+var listaTags = [];
 $(document).ready(function()
 		{
-			$.post('php/cargarPreguntas.php',{pagina:1},procesarLecturaXML,'json');
+			tituloBuscar=$("#tituloPreguntaBuscar").val();
+			$.post('php/cargarPreguntas.php',{operacion:0,dat1:1,dat2:tituloBuscar,dat3:JSON.stringify(listaTags)},procesarLecturaXML,'json');
+			$.post('php/tag.php',{operacion:1,dat1:'',dat2:1,dat3:'ALL'},function(data){
+				 var codeTags='';
+				 $.each(data, function(name, info){
+					codeTags+='<option value="'+info.id+'">'+info.nombre+'</option>';
+				 });
+				 $("#tagPreguntaBuscar").html(codeTags);
+			},'json');
 
 
 });
+function cargarVelo(){
+	$('#velo').fadeIn(500);
+}
+function filtrarPreg(){
+	tituloBuscar=$("#tituloPreguntaBuscar").val();
+	paginaActual=1;
+	$.post('php/cargarPreguntas.php',{operacion:0,dat1:1,dat2:tituloBuscar,dat3:JSON.stringify(listaTags)},procesarLecturaXML,'json');
+}
+
+function asignarTag(){
+	var idTag=$("#tagPreguntaBuscar").val();
+	var nombreTag=$("#tagPreguntaBuscar option:selected").text();
+	var result = $.grep(listaTags, function(e){ return e.id == idTag; });
+	if(result.length == 0){
+		listaTags.push({id:idTag,nombre: nombreTag});
+		$("#listaTags").append('<li><a onClick="removerTag('+(listaTags.length-1)+')" class="tag">'+listaTags[listaTags.length-1].nombre+'</a></li>');
+	}
+	else
+		mensajeError("No puedes repetir el Tag a una misma pregunta.");
+}
+function removerTag(posTag){
+	listaTags.splice(posTag,1);
+	var codeTags='';
+	for(var i =0 ;i<listaTags.length ; i++){
+	 codeTags+= '<li><a onClick="removerTag('+i+')" class="tag">'+listaTags[i].nombre+'</a></li>';
+	}
+	$("#listaTags").html(codeTags)
+}
 
 function procesarLecturaXML(data){
 		var preguntas="<tr><th>CODE</th><th>Titulo</th><th>Preview</th><th>Editar</th><th>compartir</th><th>Eliminar</th></tr>";
 		 $.each(data, function(name, info){
 		 	if(name != 'cantidad'){
-		 		preguntas +='<tr> <td>'+name+'</td><td>'+info.dirPreg+'</td><td><img height="30" width="30" src="images/lupa.png"> </img></td><td><img height="30" width="30" src="images/edit.png"> </img></td> <td><button class="button_azul">Compartir</button></td><td><button class="button_rojo">Eliminar</button></td> </tr>';
+		 		preguntas +='<tr> <td>'+info.id+'</td><td>'+info.dirPreg+'</td><td><a  style="cursor:pointer;" onClick="cargarVelo();"><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><img height="30" width="30" src="images/edit.png"> </img></td> <td><button class="button_azul">Compartir</button></td><td><button class="button_rojo">Eliminar</button></td> </tr>';
 		 	}
 		 	else{
 		 		paginador(info.value);
@@ -33,6 +71,7 @@ function ultimasPaginas(numero,nPag){
 }
 
 function paginador (cant){
+	
 	var htmlPag ='';
 	var nPag= Math.ceil(cant/15);
 	if(paginaActual > 1){
@@ -44,7 +83,7 @@ function paginador (cant){
 
 		htmlPag+='<li class="next-off">««</li>';
 		htmlPag+= '<li class="previous-off"> «Anterior </li>';
-}
+	}
 	
 	
 	//htmlPag+= '<li class="active">'+paginaActual+'</li>';
@@ -73,30 +112,12 @@ function paginador (cant){
 }
 function llamadaPhpPagina(numero){
 	paginaActual=numero;
-	$.post('php/cargarPreguntas.php',{pagina:numero},procesarLecturaXML,'json');
+	$.post('php/cargarPreguntas.php',{operacion:0,dat1:numero,dat2:tituloBuscar,dat3:JSON.stringify(listaTags)},procesarLecturaXML,'json');
 
 }
-
-	/*	function procesarPregunta(idPreg){
-			$("#contenido").hide();
-			$("#contenido2").show();
-			var urlXML = "xmlPreguntas/"+idPreg+".xml";
-			$.post(urlXML, function(d)
-			{
-
-				$(d).find('assessmentItem').each(function(){
-					var pregunta = $(this).attr('title');
-					console.log(pregunta);
-					$('#tituloPreg').html(pregunta);
-					var respCorrecta=$(d).find('assessmentItem responseDeclaration correctResponse value').text();
-					$('#respuestas').html(respCorrecta);
-					$(d).find('assessmentItem itemBody choiceInteraction simpleChoice').each(function(){
-						$('#preguntas').append($(this).text()+'<p>');
-					});
-
-					console.log(respCorrecta);
-					
-
-				});
-			});
-		}*/
+function mensajeError(texto){
+	if(!$("#notificacion_top_error").is(':visible')){
+		$("#notificacion_top_error").text(texto);
+		$("#notificacion_top_error").show(500).delay(1000).fadeOut();
+	}
+};

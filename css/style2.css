@@ -1198,6 +1198,18 @@ a:visited {
   color: white;
   font-size: 14px;
   padding: 10px; }
+.button_verde_chico {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  margin: 5px;
+  width: 100%;
+  border-radius: 5px;
+  background-color:  #879B09;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  font-size: 14px;
+  padding: 5px; }
 .button_azul {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -1426,9 +1438,9 @@ header#administrador {
         font-weight: 100; }
 
 .tablaAlter {
-  padding-top:50px;
-  padding-left:100px;
-  padding-right:100px;
+  padding-top:30px;
+  padding-left:50px;
+  padding-right:50px;
   width:100%;
     text-align: center;
   border:0px solid #f7efef;
@@ -1523,12 +1535,25 @@ header#administrador {
   border-width:0px 0px 1px 1px;
 }
 .divIzq {
+
   float:left; 
-  width:15%;
+  width:17%;
   
 }
+.sombraDiv{
+  
+  width:100%;
+    box-shadow: 2px 2px 5px #999;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
 .divDer {
-  margin-left:16%;
+  box-shadow: 2px 2px 5px #999;
+  margin-left:22%;
+  padding: 0px;
 }
 .tablaFiltro {
   margin-top:5px;padding:0px;

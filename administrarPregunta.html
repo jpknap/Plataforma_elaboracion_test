@@ -7,6 +7,7 @@
     <meta content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1' name='viewport'>
     <link href='css/style2.css' rel='stylesheet' type='text/css'>
     <link href='css/paginacion.css' rel='stylesheet' type='text/css'>
+    <link href='css/tags.css' rel='stylesheet' type='text/css'>
     <script src='js/jquery-1.9.1.min.js' type='text/javascript'></script>  
     <script src='js/gestionPreguntas.js' type='text/javascript'></script>  
     
@@ -90,7 +91,20 @@
       </div>
 
     </header>
-
+    <!-----popUp // mostrar velo $('#velo').fadeIn(500);   ---->
+     <div id='velo'>
+      <div id='pop_up_cursos'>
+        <div id='titulo'>
+          <h2>
+            Preview Pregunta 
+          </h2>
+          <img id='cerrar_pop_up' onClick="$('#velo').fadeOut(500);" src='images/cerrar_pop_up.jpg' >
+        </div>
+        <div id='contenido'>
+    
+        </div>
+      </div>
+    </div>
     <!-- titulo ventana -->
     <div id='contenedor_titulo'>
       <div class='container'>
@@ -106,25 +120,35 @@
     <div class='container'>
      
         <div class='divIzq'>
+          <div class='sombraDiv'>
             <h3>Filtros Pregunta: </h3>
-            <snap>Buscar por CODE: </snap>
-            <input  style="width:100%;" placeholder="ingrese code pregunta"></input>
-            <snap>Agregar Tag: </snap>
-            <select  style="width:100%;" placeholder="Lista Tags"></select>
+            <snap>Titulo: </snap>
+            <input  id="tituloPreguntaBuscar" style="width:100%;" placeholder="buscar por titulo"></input>
+            <snap>Tag: </snap>
+            <select id="tagPreguntaBuscar" style="width:100%;" placeholder="Lista Tags"></select>
+            <button onClick="asignarTag();" class="button_verde_chico">Añadir Tag</button>
 
-         <table  class="tablaFiltro" border=0>
           
-              <tr>
-                  <td>Tags</td>
-                  <td>quitar</td>
-              </tr>
+              <ul id="listaTags" class="tags">
+              </ul>    
 
-
-            </table>
                
-          <button class='button_agregar_alternativa' style="margin-top:15px; width:100%;"> Buscar </button>
-          </div> 
+            <button onClick="filtrarPreg();" class='button_agregar_alternativa' style="margin-top:5px; width:100%;"> Buscar </button>
+          </div>
+          <div style="margin-top:50px;" class='sombraDiv' >
+            <h3>Buscar Pregunta Compartida: </h3>
+            <snap>Codigo : </snap>
+            <input  id="codePregunta" style="width:100%;" placeholder="Ingrese codigo"></input>
+       
+
+               
+            <button  class='button_agregar_alternativa' style="margin-top:5px; width:100%;"> Buscar </button>
+          </div>
+        </div> 
+
+  
            <div class='divDer' >
+
             <table id="tablaPreguntas" class="tablaAlter">
             <thead>
             <tr>
@@ -140,9 +164,12 @@
             </tbody>
 
             </table>        
-             <ul id="pagination-flickr">             
+             <ul id="pagination-flickr">            
               </ul>
+
           </div>
+
+
      </div>
 
 
