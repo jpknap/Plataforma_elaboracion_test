@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<assessmentItem adaptive="false" timeDependent="false" label="mylabel" title="pregunta testeo espacio" identifier="choice" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd" xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:lip="http://www.imsglobal.org/xsd/imslip_v1p0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Matd/MatdML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="identifier">
+      <correctResponse>
+         <value>undefined</value>
+      </correctResponse>
+      <mapping defaultValue="0">
+         <mapEntry mapKey="A" mappedValue="2" />
+         <mapEntry mapKey="B" mappedValue="3" />
+         <mapEntry mapKey="C" mappedValue="4" />
+      </mapping>
+   </responseDeclaration>
+   <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float" />
+   <itemBody>
+      <p class="">esto&#160;es texto adiciona<br/>    creeuna sangria</p>
+      <choiceInteraction responseIdentifier="RESPONSE" shuffle="true" maxChoices="1">
+         <prompt>&#160;  hola<br/>sssss<br/>ss  sss<br/>   ddddd</prompt>
+         <simpleChoice fixed="false" identifier="A">1</simpleChoice>
+         <simpleChoice fixed="false" identifier="B">3</simpleChoice>
+         <simpleChoice fixed="false" identifier="C">4</simpleChoice>
+      </choiceInteraction>
+   </itemBody>
+   <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_response" />
+</assessmentItem>

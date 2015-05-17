@@ -5,12 +5,27 @@ if($_POST['operacion'] !=""){
 		case 0: agregarTag($_POST['dat1'],$_POST['dat2']); break;
 		case 1: listaTags($_POST['dat1'],$_POST['dat2'],$_POST['dat3']); break;
 		case 2: eliminarTag($_POST['dat1']); break;
+		case 3: getTagsPregunta($_POST['dat1']); break;
 	}
 }
+function getTagsPregunta($idPreg){
+	global $conexion;
+	$sql= 'SELECT a.id as id, a.Nombre as nombre from tag a, tagpregunta b where b.id_tag = a.id and b.id_pregunta ='.$idPreg;
+	$query = mysql_query($sql,$conexion)or die ("Error in query: $query. ".mysql_error());
+		while ($row = mysql_fetch_assoc($query, MYSQL_ASSOC)) {
+		$data[]=array("id"=>$row['id'],"nombre"=>$row['nombre']);
+	}
+	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+	header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Fecha en el pasado
+	Header("Content-type: application/json");
+	echo json_encode($data);
+}
+
 function agregarTag($nombre,$tipo){
 	global $conexion;
 	$sql= 'INSERT INTO tag(Nombre,pruebaPregunta) VALUES ("'.$nombre.'",'.$tipo.');';
 	$query = mysql_query($sql,$conexion)or die ("Error in query: $query. ".mysql_error());
+
 }
 function listaTags($nombre,$tipo,$pagina){
 	global $conexion;

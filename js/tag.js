@@ -27,7 +27,7 @@ function confirmarAccionTag(idEliminar,nombre){
 };
 
 function procesarLecturaTag(data){
-		var preguntas="<tr><td>Nombre</td><td>Eliminar</td></tr>";
+		var preguntas="<tr><th>Nombre</th><th>Eliminar</th></tr>";
 		 $.each(data, function(name, info){
 		 	if(name != 'cantidad'){
 		 		preguntas +='<tr> <td>'+info.nombre+'</td><td><button onClick=confirmarAccionTag('+info.id+',"'+encodeURI(info.nombre)+'"); class="button_rojo">'+"Eliminar"+'</button></td> </tr>';

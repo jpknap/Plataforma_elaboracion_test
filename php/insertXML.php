@@ -1,49 +1,60 @@
 <?php
-		include "conexionBD.php";
-	
-		$dato = $_POST['archivo'];
-		$titulo = $_POST['title'];
-		$tags = $_POST['tags'];
+include "conexionBD.php";
+		if($_POST['operacion'] !=""){
+			switch($_POST['operacion']){
+				case 0: generarXML($_POST['dat1'],$_POST['dat2'],$_POST['dat3']); break;
+				case 1: actualizarXML($_POST['dat1'],$_POST['dat2'],$_POST['dat3'],$_POST['dat4'],$_POST['dat5']); break;
+			}
+		}
 
-		$idUser=1000000;
-		$code=randomID($idUser);
-		$sql= 'INSERT INTO Pregunta(code) VALUES ("'.$code.'")';
-		if (mysql_query($sql,$conexion))
+		function generarXML($dato,$titulo,$tags){
+		global $conexion;	
+
+
+		
+		$sql= 'INSERT INTO Pregunta(code) VALUES ("")';
+		if (mysql_query($sql,$conexion)){
 			$id = mysql_insert_id($conexion);
+			$code=encodeCode($id);
+			$sql='UPDATE Pregunta SET dirPregunta="xmlPreguntas/'.$code.'.xml'.'", code="'.$code.'" WHERE id='.$id.';';
+			$query = mysql_query($sql,$conexion);
+			$pregunta=fopen("../xmlPreguntas/".$code.".xml","w+") or die ("No se puede crear el archivo");
 
-		$sql='UPDATE Pregunta SET dirPregunta="xmlPreguntas/'.$code.'.xml'.'" WHERE id='.$id.';';
-		$query = mysql_query($sql,$conexion);
-		$pregunta=fopen("../xmlPreguntas/".$code.".xml","w+") or die ("No se puede crear el archivo");
+			fwrite($pregunta,$dato);
+			fclose($pregunta);		
+			agregarTagPregunta($id,$tags);
+			}
+		}
+		function actualizarXML($id,$urlXML,$xml,$tags,$titulo){
+			global $conexion;	
+			$pregunta=fopen("../".$urlXML,"w+") or die ("No se puede crear el archivo");
+			fwrite($pregunta,$xml);
+			fclose($pregunta);
+			$sql='DELETE FROM tagpregunta WHERE id_pregunta='.$id.';';
+			$query = mysql_query($sql,$conexion);
+			agregarTagPregunta($id,$tags);			
+		}
 
-		fwrite($pregunta,$dato);
-		fclose($pregunta);		
-		agregarTagPregunta($id,$tags);
 
 		function agregarTagPregunta($id,$tags){
 			global $conexion;
-		$data = json_decode($tags,true);
-		$sql='';
-		for($i=0;$i<count($data);$i++){
+			$data = json_decode($tags,true);
+			$sql='';
+			for($i=0;$i<count($data);$i++){
 
-			$sql='INSERT INTO tagpregunta(id_tag, id_pregunta) VALUES ('.$data[$i]['id'].','.$id.');';
-			mysql_query($sql,$conexion);
-		}
-		
-		}
-		
-		function randomID($idUser){
-
-			$caracteres="0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
-			$largo_Pass=6;
-			$passwordRand ='';
-			for ($i=0; $i<$largo_Pass; $i++) {
-				$nRand = rand(0,strlen($caracteres)-1);
-				$passwordRand .=substr($caracteres, $nRand, 1);
+				$sql='INSERT INTO tagpregunta(id_tag, id_pregunta) VALUES ('.$data[$i]['id'].','.$id.');';
+				mysql_query($sql,$conexion);
 			}
+			
+		}
+		
+		function encodeCode($i){
 
-			$passwordRand .=substr(md5($idUser), 0, 4);
-
-			return $passwordRand;
+			$arrayCaracteres="1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+			$modI= $i% 62;
+			$mondI2=($i+7) % 62;
+			$code =hash('crc32b',(substr($arrayCaracteres,$modI,1).$i.substr($arrayCaracteres,$modI,1))).''.substr($arrayCaracteres,$modI,1);
+			return $code;
 		}
 		
 ?>

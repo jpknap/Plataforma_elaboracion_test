@@ -15,7 +15,38 @@ $(document).ready(function()
 
 
 });
-function cargarVelo(){
+
+function editarPreg(idPreg,url){
+	sessionStorage.setItem('idPreguntaEdit',idPreg);
+	sessionStorage.setItem('urlPreguntaEdit',url);
+	window.location.href='editarPregunta.html';
+}
+function cargarVelo(urlXML){
+
+	$.post(urlXML, function(d)
+	{
+		$(d).find('assessmentItem').each(function(){
+			$("#tituloPreview").html($(this).attr('title'));
+			$('#preguntasPreview').html("");
+			$('#textAdicionalPreview').html('');
+			var respCorrecta=$(d).find('assessmentItem responseDeclaration correctResponse value').text();
+			if($(d).find('assessmentItem itemBody p:nth-child(1)').length !== 0){
+				var textadicional=$('#textAdicionalPreview').html($(d).find('assessmentItem itemBody p:nth-child(1)')[0].innerHTML);
+			}
+			$(d).find('assessmentItem itemBody choiceInteraction prompt').each(function(){
+
+				$('#preguntaPreview').html($(this)[0].innerHTML);
+			});
+			$(d).find('assessmentItem itemBody choiceInteraction simpleChoice').each(function(){
+				$('#preguntasPreview').append("<h3>"+$(this).attr('identifier')+") "+$(this).text()+'</h3>');
+			});
+				$('#respuestaPreview').html("Respuesta :"+respCorrecta+")  <br/>");
+
+			
+
+		});
+
+	});
 	$('#velo').fadeIn(500);
 }
 function filtrarPreg(){
@@ -48,7 +79,7 @@ function procesarLecturaXML(data){
 		var preguntas="<tr><th>CODE</th><th>Titulo</th><th>Preview</th><th>Editar</th><th>compartir</th><th>Eliminar</th></tr>";
 		 $.each(data, function(name, info){
 		 	if(name != 'cantidad'){
-		 		preguntas +='<tr> <td>'+info.id+'</td><td>'+info.dirPreg+'</td><td><a  style="cursor:pointer;" onClick="cargarVelo();"><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><img height="30" width="30" src="images/edit.png"> </img></td> <td><button class="button_azul">Compartir</button></td><td><button class="button_rojo">Eliminar</button></td> </tr>';
+		 		preguntas +='<tr> <td>'+info.id+'</td><td>'+info.dirPreg+'</td><td><a  style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><a  style="cursor:pointer;" onClick=editarPreg("'+info.id+'","'+info.dirPreg+'");> <img height="30" width="30" src="images/edit.png"> </img></a></td> <td> <button class="button_azul">Compartir</button></td><td><button class="button_rojo">Eliminar</button></td> </tr>';
 		 	}
 		 	else{
 		 		paginador(info.value);

@@ -1,16 +1,131 @@
-var listaPreguntas = [];
-var listaTags = [];
+var textotitulo = '';
+var textoAdicional = '';
+var textoPregunta = '';
+var barajar= true;
+var listAlternativas = [];
+var listaTags =[];
+var respuesta='';
+var idPreg='';
+var urlPreg='';
 var ultimoNombreBusqueda='';
+
 var Letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-$(function() {
-	$.post('php/tag.php',{operacion:1,dat1:ultimoNombreBusqueda,dat2:1,dat3:'ALL'},function(data){
-		 var codeTags='';
-		 $.each(data, function(name, info){
-			codeTags+='<option value="'+info.id+'">'+info.nombre+'</option>';
-		 });
-		 $("#seleccionTag").html(codeTags);
-	},'json');
+$(function(){
+		if((sessionStorage['idPreguntaEdit'] !=undefined || sessionStorage['urlPreguntaEdit']!=undefined)){
+			idPreg = sessionStorage['idPreguntaEdit'];
+			urlPreg = sessionStorage['urlPreguntaEdit'];
+			sessionStorage.removeItem('idPreguntaEdit');
+			sessionStorage.removeItem('urlPreguntaEdit');
+			$.post('php/tag.php',{operacion:1,dat1:ultimoNombreBusqueda,dat2:1,dat3:'ALL'},function(data){
+			 var codeTags='';
+			 $.each(data, function(name, info){
+				codeTags+='<option value="'+info.id+'">'+info.nombre+'</option>';
+			 });
+			 $("#seleccionTag").html(codeTags);
+			},'json');
+
+			$.post('php/tag.php',{operacion:3,dat1:idPreg},obtenerTagsPregunnta,'json');
+		}
+		else{
+			window.location.replace('administrarPregunta.html');
+		}
+
+	
 });
+
+function cargarXML(urlXML){
+	$.post(urlXML, function(data){
+		procesarXML(data);
+	});
+
+}
+function obtenerTagsPregunnta(data){
+ 		$.each(data, function(name, info){
+			listaTags.push({id:info.id,nombre:info.nombre});
+		 });
+
+		cargarXML(urlPreg);
+
+}
+function procesarXML(d){
+	$(d).find('assessmentItem').each( function(){
+			 textotitulo= $(this).attr('title');
+		
+			barajar=$(d).find('assessmentItem choiceInteraction').attr('shuffle');
+			var respCorrecta=$(d).find('assessmentItem responseDeclaration correctResponse value').text();
+			if($(d).find('assessmentItem itemBody p:nth-child(1)').length !== 0){
+				textoAdicional=$(d).find('assessmentItem itemBody p:nth-child(1)')[0].innerHTML;
+			}
+		
+
+			$(d).find('assessmentItem itemBody choiceInteraction prompt').each(function(){
+
+				textoPregunta=$(this)[0].innerHTML;
+			
+			});
+			$(d).find('assessmentItem itemBody choiceInteraction simpleChoice').each(function(){
+				listAlternativas.push({id:$(this).attr("identifier"),text:$(this).text(), valor: 0});
+			});
+			var i =0;
+			$(d).find('assessmentItem responseDeclaration mapping mapEntry').each(function(){
+				listAlternativas[i].valor=$(this).attr('mappedValue');
+				i++;
+			});
+				respuesta = respCorrecta;
+			
+
+		});
+
+	cargarDatos();
+	
+}
+
+function cargarAlternativas(){
+	var largoLista = listAlternativas.length;
+	var addToTable='<tr><th>Nº</th><th>Alternativa</th><th>Valor</th><th>Respuesta</th><th>Eliminar</th></tr>';
+	for(var i =0 ;i<largoLista ; i++){
+		if(respuesta == listAlternativas[i].id){
+			 addToTable+= '<tr><td>'+Letters[i]+'</td><td>'+listAlternativas[i].text+'</td><td>'+listAlternativas[i].valor+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[i]+'" checked> <br></td> <td><button onclick=eliminarElemento('+i+')> Eliminar </button> <br></td></tr>';
+		}
+		else{
+			 addToTable+= '<tr><td>'+Letters[i]+'</td><td>'+listAlternativas[i].text+'</td><td>'+listAlternativas[i].valor+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[i]+'"> <br></td> <td><button onclick=eliminarElemento('+i+')> Eliminar </button> <br></td></tr>';
+		}
+	}
+	$("#tablaAlternativas").html(addToTable)
+}
+function cargarTags(){
+	var codeTags='';
+	for(var i =0 ;i<listaTags.length ; i++){
+	 codeTags+= '<li><a onClick="removerTag('+i+')" class="tag">'+listaTags[i].nombre+'</a></li>';
+	}
+	$("#listaTags").html(codeTags);
+}
+function inversaCaracteresEspeciales(texto) {
+	texto =texto.replace(/&amp;/g,"&");
+	texto =texto.replace(/&quot;/g,'"');
+	texto =texto.replace(/&apos;/g,"'");
+
+	texto =texto.replace(/<br[^>]+>/g,'\n');
+	texto =texto.replace(/&lt;/g,"<");
+	texto =texto.replace(/&gt;/g,">");	
+
+	return texto;
+}
+function cargarDatos(){
+	$("#tituloPregunta").val(textotitulo);
+	$("#idTextoAdicional").val(inversaCaracteresEspeciales(textoAdicional));
+	$("#textPregunta").val(inversaCaracteresEspeciales(textoPregunta));
+
+	if(barajar=="true"){
+		$('#idBarajar[value="true"]').prop("checked",true);
+	}
+	else{
+		$('#idBarajar[value="false"]').prop("checked",true);
+	}
+	cargarAlternativas();
+	cargarTags();
+
+}
 
 function cargarTag(){
 	ultimoNombreBusqueda=$('#nombreBusquedaTag').val();
@@ -40,22 +155,21 @@ function removerTag(posTag){
 function agregarAlternativa(){
 	var texto = $("#textAlternativaAgregar").val();
 	var valor = $("#valorAlternativaAgregar").val();	
-	listaPreguntas.push({text: texto, valor: valor});
-	var posicionLetra = listaPreguntas.length-1;
+	listAlternativas.push({text: texto, valor: valor});
+	var posicionLetra = listAlternativas.length-1;
 	var addToTable= '<tr><td>'+Letters[posicionLetra]+'</td><td>'+texto+'</td><td>'+valor+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[posicionLetra]+'"> <br></td> <td><button onclick=eliminarElemento('+posicionLetra+')> Eliminar </button> <br></td></tr>';
 	$("#tablaAlternativas").append(addToTable);
 	}
 
 function eliminarElemento(posicion){
-	listaPreguntas.splice(posicion,1);
-	var largoLista = listaPreguntas.length;
+	listAlternativas.splice(posicion,1);
+	var largoLista = listAlternativas.length;
 	var addToTable='<tr><th>Nº</th><th>Alternativa</th><th>Valor</th><th>Respuesta</th><th>Eliminar</th></tr>';
 	for(var i =0 ;i<largoLista ; i++){
-	 addToTable+= '<tr><td>'+Letters[i]+'</td><td>'+listaPreguntas[i].text+'</td><td>'+listaPreguntas[i].valor+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[i]+'"> <br></td> <td><button onclick=eliminarElemento('+i+')> Eliminar </button> <br></td></tr>';
+	 addToTable+= '<tr><td>'+Letters[i]+'</td><td>'+listAlternativas[i].text+'</td><td>'+listAlternativas[i].valor+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[i]+'"> <br></td> <td><button onclick=eliminarElemento('+i+')> Eliminar </button> <br></td></tr>';
 	}
 	$("#tablaAlternativas").html(addToTable)
 }
-
 function mensajeError(texto){
 	if(!$("#notificacion_top_error").is(':visible')){
 		$("#notificacion_top_error").text(texto);
@@ -75,12 +189,10 @@ function remplazarCaracteresEspeciales(texto){
 	
 	return texto;
 }
-
-
-function generarXMLSimpleChoice(){
+function editarXMLSimpleChoice(){
 			var size = 0;
 
-			var largoLista = listaPreguntas.length;
+			var largoLista = listAlternativas.length;
 		
 			var sizechoices = 0
 			var titulo = $("input#tituloPregunta").val();
@@ -136,7 +248,7 @@ function generarXMLSimpleChoice(){
 									
 										cH.writeStartElement('mapEntry');
 											cH.writeAttributeString('mapKey',''+Letters[i]);
-											cH.writeAttributeString('mappedValue',listaPreguntas[i].valor);
+											cH.writeAttributeString('mappedValue',listAlternativas[i].valor);
 										cH.writeEndElement('mapEntry');
 						}
 					
@@ -173,7 +285,7 @@ function generarXMLSimpleChoice(){
 
 									cH.writeAttributeString('fixed','false');
 									cH.writeAttributeString('identifier',''+Letters[i]);
-									cH.writeString(remplazarCaracteresEspeciales(listaPreguntas[i].text));
+									cH.writeString(remplazarCaracteresEspeciales(listAlternativas[i].text));
 								cH.writeEndElement('simpleChoice');
 							
 							}
@@ -193,7 +305,7 @@ function generarXMLSimpleChoice(){
 		
 			
 			
-			var envio = 'operacion=0&dat1='+encodeURIComponent(xml)+'&dat2='+titulo+'&dat3='+JSON.stringify(listaTags);	//	alert(envio);
+			var envio = 'operacion=1&dat1='+idPreg+'&dat2='+urlPreg+'&dat3='+encodeURIComponent(xml)+'&dat4='+JSON.stringify(listaTags)+'&dat5='+titulo;	//	alert(envio);
 			
 			
 			
@@ -204,7 +316,7 @@ function generarXMLSimpleChoice(){
 					data: envio,
 					async: false,
 					success: function(respuesta){
-						$("#notificacion_top_ok").show(100).delay(1000).fadeOut(function(){ location.href = 'crearPregunta.html';});								
+						$("#notificacion_top_ok").show(100).delay(1000).fadeOut(function(){ window.location.replace('administrarPregunta.html');});								
 					},
 					error: function(e) {
 						console.log('Error :'+e);
@@ -216,3 +328,4 @@ function generarXMLSimpleChoice(){
 				
 			 
 		};
+
