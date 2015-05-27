@@ -1543,7 +1543,8 @@ header#administrador {
 .sombraDiv{
   
   width:100%;
-    box-shadow: 2px 2px 5px #999;
+  height: 100%;
+  box-shadow: 2px 2px 5px #999;
   padding-top: 10px;
   padding-bottom: 20px;
   padding-right: 20px;

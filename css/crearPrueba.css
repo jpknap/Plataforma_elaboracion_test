@@ -1,0 +1,23 @@
+
+.PruebadivIzq {
+
+  float:left; 
+  width:15%;
+  margin-bottom: 10px
+  
+}
+
+.PruebadivMid {
+  
+  margin-left:18%;
+  padding: 0px;
+  width:60%;
+
+}
+
+.PruebadivDer {
+  margin-left:80%;
+  margin-top:-65px;
+  padding: 0px;
+  width:15%;
+}
