@@ -9,7 +9,7 @@ $(document).ready(function()
 
 });
 function agregarTag(){
-	$.post('php/tag.php',{operacion:0,dat1:''+$('#nombreAgregar').val(),dat2:''+$('#tipoAgregar').val()},'').done(function(){cargarTag(paginaActual)});
+	$.post('php/tag.php',{operacion:0,dat1:''+$('#nombreAgregar').val(),dat2:''+$('#tipoAgregar').val(), dat3:localStorage.idUser},'').done(function(){cargarTag(paginaActual)});
 	$('#nombreAgregar').val('');
 
 };
@@ -17,7 +17,7 @@ function cargarTag(pag){
 	ultimoNombreBusqueda=$('#nombreBusqueda').val();
 	ultimoTipoBusqueda=$('#tipoBusqueda').val();
 	paginaActual=pag;
-	$.post('php/tag.php',{operacion:1,dat1:ultimoNombreBusqueda,dat2:ultimoTipoBusqueda,dat3:paginaActual},procesarLecturaTag,'json');
+	$.post('php/tag.php',{operacion:1,dat1:ultimoNombreBusqueda,dat2:ultimoTipoBusqueda,dat3:paginaActual, dat4:localStorage.idUser},procesarLecturaTag,'json');
 
 };
 function confirmarAccionTag(idEliminar,nombre){

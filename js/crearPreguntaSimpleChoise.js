@@ -1,9 +1,10 @@
 var listaPreguntas = [];
 var listaTags = [];
 var ultimoNombreBusqueda='';
+
 var Letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 $(function() {
-	$.post('php/tag.php',{operacion:1,dat1:ultimoNombreBusqueda,dat2:1,dat3:'ALL'},function(data){
+	$.post('php/tag.php',{operacion:1,dat1:ultimoNombreBusqueda,dat2:1,dat3:'ALL',dat4:localStorage.idUser},function(data){
 		 var codeTags='';
 		 $.each(data, function(name, info){
 			codeTags+='<option value="'+info.id+'">'+info.nombre+'</option>';
@@ -15,7 +16,7 @@ $(function() {
 function cargarTag(){
 	ultimoNombreBusqueda=$('#nombreBusquedaTag').val();
 
-	$.post('php/tag.php',{operacion:1,dat1:ultimoNombreBusqueda,dat2:1,dat3:'ALL'},'','json');
+	$.post('php/tag.php',{operacion:1,dat1:ultimoNombreBusqueda,dat2:1,dat3:'ALL', dat4:localStorage.idUser},'','json');
 
 };
 function asignarTag(){
@@ -193,7 +194,7 @@ function generarXMLSimpleChoice(){
 		
 			
 			
-			var envio = 'operacion=0&dat1='+encodeURIComponent(xml)+'&dat2='+titulo+'&dat3='+JSON.stringify(listaTags);	//	alert(envio);
+			var envio = 'operacion=0&dat1='+encodeURIComponent(xml)+'&dat2='+titulo+'&dat3='+JSON.stringify(listaTags)+'&dat4='+localStorage.idUser;	//	alert(envio);
 			
 			
 			
@@ -204,7 +205,7 @@ function generarXMLSimpleChoice(){
 					data: envio,
 					async: false,
 					success: function(respuesta){
-						$("#notificacion_top_ok").show(100).delay(1000).fadeOut(function(){ location.href = 'crearPregunta.html';});								
+						//$("#notificacion_top_ok").show(100).delay(1000).fadeOut(function(){ location.href = 'crearPregunta.html';});								
 					},
 					error: function(e) {
 						console.log('Error :'+e);
