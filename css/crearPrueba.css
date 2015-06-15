@@ -3,21 +3,23 @@
 
   float:left; 
   width:15%;
-  margin-bottom: 10px
+  margin-bottom: 10px;
+  margin-top: 50px;
   
 }
 
 .PruebadivMid {
   
-  margin-left:18%;
+  float:left; 
   padding: 0px;
   width:60%;
 
 }
 
 .PruebadivDer {
-  margin-left:80%;
-  margin-top:-65px;
-  padding: 0px;
-  width:15%;
+
+  float:left; 
+ width:15%;
+  margin-bottom: 10px;
+  margin-top: 50px;
 }

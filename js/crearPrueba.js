@@ -1,25 +1,55 @@
-var paginaActual=1;
-var tituloBuscar='';
+var listaPreguntas = [];
 var listaTags = [];
-$(document).ready(function()
-		{
-			tituloBuscar=$("#tituloPreguntaBuscar").val();
-			$.post('php/cargarPreguntas.php',{operacion:0,dat1:1,dat2:tituloBuscar,dat3:JSON.stringify(listaTags),dat4:localStorage.idUser } ,procesarLecturaXML,'json');
-			$.post('php/tag.php',{operacion:1,dat1:'',dat2:"pregunta",dat3:'ALL',dat4:localStorage.idUser},function(data){
-				 var codeTags='';
-				 $.each(data, function(name, info){
-					codeTags+='<option value="'+info.id+'">'+info.nombre+'</option>';
-				 });
-				 $("#tagPreguntaBuscar").html(codeTags);
-			},'json');
-
-
+var listaTagsBusqueda = [];
+var paginaActual=1;
+$(function()
+	{
+	//$.post('php/cargarPreguntas.php',{operacion:0,dat1:1,dat2:'',dat3:JSON.stringify(listaTags),dat4:localStorage.idUser } ,procesarLecturaXML,'json');
+	$.post('php/tag.php',{operacion:1,dat1:'',dat2:"prueba",dat3:'ALL',dat4:localStorage.idUser},function(data){
+			 var codeTags='';
+			 $.each(data, function(name, info){
+				codeTags+='<option value="'+info.id+'">'+info.nombre+'</option>';
+			 });
+			 $("#seleccionTag").html(codeTags);
+		},'json');
 });
+function asignarTag(){
+	var idTag=$("#seleccionTag").val();
+	var nombreTag=$("#seleccionTag option:selected").text();
+	var result = $.grep(listaTags, function(e){ return e.id == idTag; });
+	if(result.length == 0){
+		listaTags.push({id:idTag,nombre: nombreTag});
+		$("#listaTags").append('<li><a onClick="removerTag('+(listaTags.length-1)+')" class="tag">'+listaTags[listaTags.length-1].nombre+'</a></li>');
+	}
+	else
+		mensajeError("No puedes repetir el Tag a una misma pregunta.");
+}
+function mensajeError(texto){
+	if(!$("#notificacion_top_error").is(':visible')){
+		$("#notificacion_top_error").text(texto);
+		$("#notificacion_top_error").show(500).delay(1000).fadeOut();
+	}
+};
+function removerTag(posTag){
+	listaTags.splice(posTag,1);
+	var codeTags='';
+	for(var i =0 ;i<listaTags.length ; i++){
+	 codeTags+= '<li><a onClick="removerTag('+i+')" class="tag">'+listaTags[i].nombre+'</a></li>';
+	}
+	$("#listaTags").html(codeTags)
+}
 
-function editarPreg(idPreg,url){
-	sessionStorage.setItem('idPreguntaEdit',idPreg);
-	sessionStorage.setItem('urlPreguntaEdit',url);
-	window.location.href='editarPregunta.html';
+function procesarLecturaXML(data){
+		var preguntas='<tr><th width="20%" >CODE</th><th width="50%">Titulo</th><th width="10%">Preview</th><th width="20%">Asignar</th></tr>';
+		 $.each(data, function(name, info){
+		 	if(name != 'cantidad'){
+		 		preguntas +='<tr> <td>'+info.id+'</td><td>'+info.titulo+'</td><td><a  style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><a  style="cursor:pointer;" onClick=asignarPregunta("'+encodeURI(info.titulo)+'","'+info.id+'","'+info.dirPreg+'");> <img height="30" width="30" src="images/edit.png"> </img></a></td></tr>';
+		 	}
+		 	else{
+		 		paginador(info.value);
+		 	}
+		 });
+		 $("#tablaPreguntas").html(preguntas);
 }
 function cargarVelo(urlXML){
 
@@ -52,41 +82,16 @@ function cargarVelo(urlXML){
 function filtrarPreg(){
 	tituloBuscar=$("#tituloPreguntaBuscar").val();
 	paginaActual=1;
-	$.post('php/cargarPreguntas.php',{operacion:0,dat1:1,dat2:tituloBuscar,dat3:JSON.stringify(listaTags),dat4:localStorage.idUser },procesarLecturaXML,'json');
+	$.post('php/cargarPreguntas.php',{operacion:0,dat1:1,dat2:tituloBuscar,dat3:JSON.stringify(listaTagsBusqueda),dat4:localStorage.idUser },procesarLecturaXML,'json');
 }
+function asignarPregunta(titulo,id, url){
+	console.log(id);
+	$("#preguntasAsig").append('<div style="background-color:yellow; margin-top:4px; height: 45px; width: 100%;"> <snap style=" margin-left:7px;  width:110px; float:left; ">'+decodeURI(titulo).substring(0,15)+'</snap> <a  style="cursor:pointer; margin-top:10px; float:left;" onClick=cargarVelo("'+url+'");><img height="25" width="25" src="images/lupa.png"> </img></a> <button style=" margin-left:5px;  margin-top:10px;float:left;"> X </button> </div>');
+	
+}
+//paginacion de elementos pregunta
 
-function asignarTag(){
-	var idTag=$("#tagPreguntaBuscar").val();
-	var nombreTag=$("#tagPreguntaBuscar option:selected").text();
-	var result = $.grep(listaTags, function(e){ return e.id == idTag; });
-	if(result.length == 0){
-		listaTags.push({id:idTag,nombre: nombreTag});
-		$("#listaTags").append('<li><a onClick="removerTag('+(listaTags.length-1)+')" class="tag">'+listaTags[listaTags.length-1].nombre+'</a></li>');
-	}
-	else
-		mensajeError("No puedes repetir el Tag a una misma pregunta.");
-}
-function removerTag(posTag){
-	listaTags.splice(posTag,1);
-	var codeTags='';
-	for(var i =0 ;i<listaTags.length ; i++){
-	 codeTags+= '<li><a onClick="removerTag('+i+')" class="tag">'+listaTags[i].nombre+'</a></li>';
-	}
-	$("#listaTags").html(codeTags)
-}
 
-function procesarLecturaXML(data){
-		var preguntas="<tr><th>CODE</th><th>Titulo</th><th>Preview</th><th>Editar</th><th>compartir</th><th>Eliminar</th></tr>";
-		 $.each(data, function(name, info){
-		 	if(name != 'cantidad'){
-		 		preguntas +='<tr> <td>'+info.id+'</td><td>'+info.titulo+'</td><td><a  style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><a  style="cursor:pointer;" onClick=editarPreg("'+info.id+'","'+info.dirPreg+'");> <img height="30" width="30" src="images/edit.png"> </img></a></td> <td> <button class="button_azul">Compartir</button></td><td><button class="button_rojo">Eliminar</button></td> </tr>';
-		 	}
-		 	else{
-		 		paginador(info.value);
-		 	}
-		 });
-		 $("#tablaPreguntas").html(preguntas);
-}
 function ultimasPaginas(numero,nPag){
 	var string='';
 	var codeHTML=[]
@@ -146,9 +151,3 @@ function llamadaPhpPagina(numero){
 	$.post('php/cargarPreguntas.php',{operacion:0,dat1:numero,dat2:tituloBuscar,dat3:JSON.stringify(listaTags)},procesarLecturaXML,'json');
 
 }
-function mensajeError(texto){
-	if(!$("#notificacion_top_error").is(':visible')){
-		$("#notificacion_top_error").text(texto);
-		$("#notificacion_top_error").show(500).delay(1000).fadeOut();
-	}
-};

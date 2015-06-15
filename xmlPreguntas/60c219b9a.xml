@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<assessmentItem adaptive="false" timeDependent="false" label="mylabel" title="Números Primos" identifier="choice" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd" xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:lip="http://www.imsglobal.org/xsd/imslip_v1p0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Matd/MatdML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="identifier">
+      <correctResponse>
+         <value>C</value>
+      </correctResponse>
+      <mapping defaultValue="0">
+         <mapEntry mapKey="A" mappedValue="1" />
+         <mapEntry mapKey="B" mappedValue="1" />
+         <mapEntry mapKey="C" mappedValue="1" />
+         <mapEntry mapKey="D" mappedValue="1" />
+      </mapping>
+   </responseDeclaration>
+   <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float" />
+   <itemBody>
+      <p class="">Los&#160;números&#160;primos&#160;son&#160;números,&#160;que&#160;solo&#160;son&#160;divisibles&#160;por&#160;1&#160;o&#160;el&#160;mismo.</p>
+      <choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1">
+         <prompt>Cual&#160;de&#160;estos&#160;numero&#160;no&#160;es&#160;un&#160;numero&#160;primo</prompt>
+         <simpleChoice fixed="false" identifier="A">3</simpleChoice>
+         <simpleChoice fixed="false" identifier="B">5</simpleChoice>
+         <simpleChoice fixed="false" identifier="C">6</simpleChoice>
+         <simpleChoice fixed="false" identifier="D">11</simpleChoice>
+      </choiceInteraction>
+   </itemBody>
+   <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_response" />
+</assessmentItem>

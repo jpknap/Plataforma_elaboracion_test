@@ -16,7 +16,7 @@ $(function(){
 			urlPreg = sessionStorage['urlPreguntaEdit'];
 			sessionStorage.removeItem('idPreguntaEdit');
 			sessionStorage.removeItem('urlPreguntaEdit');
-			$.post('php/tag.php',{operacion:1,dat1:ultimoNombreBusqueda,dat2:1,dat3:'ALL'},function(data){
+			$.post('php/tag.php',{operacion:1,dat1:ultimoNombreBusqueda,dat2:"pregunta",dat3:'ALL',dat4:localStorage.idUser},function(data){
 			 var codeTags='';
 			 $.each(data, function(name, info){
 				codeTags+='<option value="'+info.id+'">'+info.nombre+'</option>';
@@ -24,7 +24,7 @@ $(function(){
 			 $("#seleccionTag").html(codeTags);
 			},'json');
 
-			$.post('php/tag.php',{operacion:3,dat1:idPreg},obtenerTagsPregunnta,'json');
+			$.post('php/tag.php',{operacion:3,dat1:idPreg,dat2:localStorage.idUser},obtenerTagsPregunnta,'json');
 		}
 		else{
 			window.location.replace('administrarPregunta.html');

@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<assessmentItem adaptive="false" timeDependent="false" label="mylabel" title="aaaa" identifier="choice" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd" xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:lip="http://www.imsglobal.org/xsd/imslip_v1p0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Matd/MatdML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<assessmentItem adaptive="false" timeDependent="false" label="mylabel" title="eeee" identifier="choice" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd" xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:lip="http://www.imsglobal.org/xsd/imslip_v1p0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Matd/MatdML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="identifier">
       <correctResponse>
-         <value>A</value>
+         <value>C</value>
       </correctResponse>
       <mapping defaultValue="0">
          <mapEntry mapKey="A" mappedValue="1" />
          <mapEntry mapKey="B" mappedValue="1" />
+         <mapEntry mapKey="C" mappedValue="1" />
       </mapping>
    </responseDeclaration>
    <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float" />
    <itemBody>
-      <p class="">cccc</p>
+      <p class="">eeeee</p>
       <choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1">
-         <prompt>sssss</prompt>
+         <prompt>eeee</prompt>
          <simpleChoice fixed="false" identifier="A">11</simpleChoice>
-         <simpleChoice fixed="false" identifier="B">11</simpleChoice>
+         <simpleChoice fixed="false" identifier="B">ee</simpleChoice>
+         <simpleChoice fixed="false" identifier="C">ee</simpleChoice>
       </choiceInteraction>
    </itemBody>
    <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_response" />

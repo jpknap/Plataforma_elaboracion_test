@@ -4,7 +4,7 @@ var ultimoNombreBusqueda='';
 
 var Letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 $(function() {
-	$.post('php/tag.php',{operacion:1,dat1:ultimoNombreBusqueda,dat2:1,dat3:'ALL',dat4:localStorage.idUser},function(data){
+	$.post('php/tag.php',{operacion:1,dat1:ultimoNombreBusqueda,dat2:"pregunta",dat3:'ALL',dat4:localStorage.idUser},function(data){
 		 var codeTags='';
 		 $.each(data, function(name, info){
 			codeTags+='<option value="'+info.id+'">'+info.nombre+'</option>';
