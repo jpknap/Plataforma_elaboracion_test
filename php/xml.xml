@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version='1.0'  encoding='UTF-8'?>
 <assessmentItem adaptive="false" timeDependent="false" label="mylabel" title="Números Primos" identifier="choice" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd" xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:lip="http://www.imsglobal.org/xsd/imslip_v1p0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Matd/MatdML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="identifier">
       <correctResponse>

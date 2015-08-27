@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<assessmentItem adaptive="false" timeDependent="false" label="mylabel" title="2323" identifier="choice" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd" xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:lip="http://www.imsglobal.org/xsd/imslip_v1p0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Matd/MatdML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<assessmentItem adaptive="false" timeDependent="false" label="mylabel" title="pregunta 2" identifier="choice" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd" xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:lip="http://www.imsglobal.org/xsd/imslip_v1p0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Matd/MatdML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="identifier">
       <correctResponse>
          <value>A</value>
@@ -12,12 +12,12 @@
    </responseDeclaration>
    <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float" />
    <itemBody>
-      <p class="">232</p>
+      <p class="">wqwqw</p>
       <choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1">
-         <prompt>222</prompt>
+         <prompt>qwqwqwqwq</prompt>
          <simpleChoice fixed="false" identifier="A">1</simpleChoice>
-         <simpleChoice fixed="false" identifier="B">12</simpleChoice>
-         <simpleChoice fixed="false" identifier="C">123</simpleChoice>
+         <simpleChoice fixed="false" identifier="B">2</simpleChoice>
+         <simpleChoice fixed="false" identifier="C">3</simpleChoice>
       </choiceInteraction>
    </itemBody>
    <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_response" />

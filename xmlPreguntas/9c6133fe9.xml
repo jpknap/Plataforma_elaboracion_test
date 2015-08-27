@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<assessmentItem adaptive="false" timeDependent="false" label="mylabel" title="titulo testeo" identifier="choice" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd" xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:lip="http://www.imsglobal.org/xsd/imslip_v1p0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Matd/MatdML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<assessmentItem adaptive="false" timeDependent="false" label="mylabel" title="12121" identifier="choice" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd" xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:lip="http://www.imsglobal.org/xsd/imslip_v1p0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Matd/MatdML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="identifier">
       <correctResponse>
-         <value>B</value>
+         <value>A</value>
       </correctResponse>
       <mapping defaultValue="0">
-         <mapEntry mapKey="A" mappedValue="11" />
-         <mapEntry mapKey="B" mappedValue="11" />
-         <mapEntry mapKey="C" mappedValue="11" />
-         <mapEntry mapKey="D" mappedValue="11" />
+         <mapEntry mapKey="A" mappedValue="" />
       </mapping>
    </responseDeclaration>
    <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float" />
    <itemBody>
-      <p class="">texto&#160;adicional&#160;testeo</p>
+      <p class="">21212</p>
       <choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1">
-         <prompt>pregunta&#160;test</prompt>
-         <simpleChoice fixed="false" identifier="A">111</simpleChoice>
-         <simpleChoice fixed="false" identifier="B">111</simpleChoice>
-         <simpleChoice fixed="false" identifier="C">111</simpleChoice>
-         <simpleChoice fixed="false" identifier="D">111</simpleChoice>
+         <prompt>1212</prompt>
+         <simpleChoice fixed="false" identifier="A">212</simpleChoice>
       </choiceInteraction>
    </itemBody>
    <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_response" />

@@ -6,7 +6,11 @@
     <link href='images/favicon.png' rel='shortcut icon'>
     <meta content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1' name='viewport'>
     <link href='css/style2.css' rel='stylesheet' type='text/css'>
+
+    <link href='css/paginacion.css' rel='stylesheet' type='text/css'>
+    <link href='css/tags.css' rel='stylesheet' type='text/css'>
     <script src='js/jquery-1.9.1.min.js' type='text/javascript'></script>  
+    <script src='js/imprimirPrueba.js' type='text/javascript'></script>  
     
     <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
 
@@ -44,7 +48,6 @@
         <!-- navs superiores -->
         <nav>
           <ul>
-
             <a href='menu.html'>
               <li >Principal</li>
             </a>
@@ -57,16 +60,16 @@
             <a href='administrarPregunta.html'>
               <li >Gestion Preguntas</li>
             </a>
-            <a href='AdministrarPrueba.html'>
-              <li >Gestion Prueba</li>
-            </a>
-               <a href='tag.html'>
+            <a href='#'>
+              <li>Gestion Prueba</li>
+            </a>            
+            <a href='tag.html'>
               <li >Tags</li>
             </a>
           </ul>
         </nav>
-        <a  id='activo' href='#'>
-          <button  id='cambioMenu'>
+        <a href='imprimirPrueba.html' >
+          <button id='cambioMenu'>
             Imprimir Prueba
           </button>
         </a>
@@ -88,12 +91,29 @@
       </div>
 
     </header>
-
+    <!-----popUp // mostrar velo $('#velo').fadeIn(500);   ---->
+     <div id='velo'>
+      <div id='pop_up_cursos'>
+        <div id='titulo'>
+          <h2 id="tituloPreview">
+            Descripcion Prueba 
+          </h2>
+          <img id='cerrar_pop_up' onClick="$('#velo').fadeOut(500);" src='images/cerrar_pop_up.jpg' >
+        </div>
+        <div id='contenido' >
+          <h2 id ='textAdicionalPreview'> texto adicional </h2>
+          <snap id ='preguntaPreview'> texto adicional </snap>
+          <div id="preguntasPreview"> </div>
+          <h4 style="float:right; "id="respuestaPreview"> </h4>
+          <br/>
+        </div>
+      </div>
+    </div>
     <!-- titulo ventana -->
     <div id='contenedor_titulo'>
       <div class='container'>
         <h1>
-          Imprimir Prueba
+          Gestion Prueba
         </h1>
         <p id='nota_de_ayuda'>
           En esta venatana encontraras ayuda de como crear y administrar tus preguntas y pruebas.
@@ -102,13 +122,52 @@
     </div>
     <!-- fin titulo ventana -->
 
-    <div id='administrador_asignaturas'>
-      <div class='container'>
-        <div class='crear'>
-             Contenido de la ventana
+  <div class='container'>
+     
+        <div class='divIzq'>
+          <div class='sombraDiv'>
+            <h3>Filtros Prueba: </h3>
+            <snap>Titulo: </snap>
+            <input  id="tituloPreguntaBuscar" style="width:100%;" placeholder="buscar por titulo"></input>
+            <snap>Tag: </snap>
+            <select id="tagPreguntaBuscar" style="width:100%;" placeholder="Lista Tags"></select>
+            <button onClick="asignarTag();" class="button_verde_chico">Añadir Tag</button>
+
+          
+              <ul id="listaTags" class="tags">
+              </ul>    
+
+               
+            <button onClick="filtrarPreg();" class='button_agregar_alternativa' style="margin-top:5px; width:100%;"> Buscar </button>
           </div>
-        </div>
-      </div>
+       
+        </div> 
+
+  
+           <div class='divDer' >
+
+            <table id="tablaPreguntas" class="tablaAlter">
+            <thead>
+            <tr>
+                <th>Titulo</th>
+                <th>Descripcion</th>
+                <th>Fecha</th>
+                <th>Editar</th>                
+                <th>Eliminar</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+
+            </table>        
+             <ul id="pagination-flickr">            
+              </ul>
+
+          </div>
+
+
+     </div>
+
 
  
 

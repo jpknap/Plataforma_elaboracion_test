@@ -16,9 +16,16 @@ $(document).ready(function()
 
 });
 
-function editarPrueba(idPrueba){
-	sessionStorage.setItem('idPruebaEdit',idPrueba);
-	window.location.href='editarPrueba.html';
+function printPrueba(idPrueba){
+	localStorage['idPruebaPrint'] = idPrueba;
+	var win = window.open('baseTest.html', '_blank');
+	if(win){
+	    //Browser has allowed it to be opened
+	    win.focus();
+	}
+}
+function genWord(idPrueba){
+		window.location.href = 'php/generateWord.php?idTest='+idPrueba;
 }
 function cargarDescripcion(titulo,descripcion){
 
@@ -53,11 +60,10 @@ function removerTag(posTag){
 }
 
 function procesarLecturaXML(data){
-		var preguntas="<tr><th>Titulo</th><th>Descripcion</th><th>Fecha</th><th>Editar</th><th>Eliminar</th></tr>";
+		var preguntas="<tr><th>Titulo</th><th>Descripcion</th><th>Fecha</th><th>ver Online</th><th>ver Word</th></tr>";
 		 $.each(data, function(name, info){
 		 	if(name != 'cantidad'){
-		 		preguntas +='<tr><td width=350 >'+info.titulo+'</td><td><a  style="cursor:pointer;" onClick=cargarDescripcion("'+encodeURIComponent(info.titulo)+'","'+encodeURIComponent(info.descripcion)+'");><img height="30" width="30" src="images/lupa.png"> </img></a><td>'+info.fecha+'</td></td><td><a  style="cursor:pointer;" onClick=editarPrueba("'+info.id+'");> <img height="30" width="30" src="images/edit.png"> </img></a></td><td><button class="button_rojo">Eliminar</button></td> </tr>';
-		 	}
+		 		preguntas +='<tr><td width=350 >'+info.titulo+'</td><td><a  style="cursor:pointer;" onClick=cargarDescripcion("'+encodeURIComponent(info.titulo)+'","'+encodeURIComponent(info.descripcion)+'");><img height="30" width="30" src="images/lupa.png"> </img></a><td>'+info.fecha+'</td></td><td><a  style="cursor:pointer;" onClick=printPrueba("'+info.id+'");> <img height="40" width="40" src="images/paper.png"> </img></a></td><td><a  style="cursor:pointer;" onClick=genWord("'+info.id+'");><img height="30" width="30" src="images/word.png"></a></td> </tr>';}
 		 	else{
 		 		paginador(info.value);
 		 	}

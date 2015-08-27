@@ -28,11 +28,11 @@ function cargarPreguntas($hoja,$titulo,$tags,$idUser){
 		$query1 = mysql_query($sql_id,$conexion) or die ("Error in query: $query. ".mysql_error());
 		$data['cantidad']=array("value"=>mysql_num_rows($query1));
 
-		$sql_id = 'SELECT id as id , titulo as titulo, url as url FROM pregunta_user z,pregunta a  left JOIN pregunta_tag  on 1 WHERE z.id_usuario='.$idUser.' AND z.id_pregunta = a.id and a.titulo LIKE "%'.$titulo.'%" '.$tagSql.' GROUP BY id '.$tagSql2.' LIMIT '.$cant_Hoja*($hoja-1).','.$cant_Hoja.';';  // <---- OJO! 
+		$sql_id = 'SELECT a.id as id , a.titulo as titulo, a.url as url, a.compartir as compartir, a.codigo as codigo FROM pregunta_user z,pregunta a  left JOIN pregunta_tag  on 1 WHERE z.id_usuario='.$idUser.' AND z.eliminada=0  AND z.id_pregunta = a.id and a.titulo LIKE "%'.$titulo.'%" '.$tagSql.' GROUP BY id '.$tagSql2.' LIMIT '.$cant_Hoja*($hoja-1).','.$cant_Hoja.';';  // <---- OJO! 
 		$query1 = mysql_query($sql_id,$conexion) or die ("Error in query: $query. ".mysql_error());
 		//$resp=mysql_result($query1);
 		while ($row = mysql_fetch_assoc($query1, MYSQL_ASSOC)) {
-			$data[]=array("dirPreg"=>$row['url'],"id"=>$row['id'],"titulo"=>$row['titulo']);
+			$data[]=array("dirPreg"=>$row['url'],"id"=>$row['id'],"titulo"=>$row['titulo'],"compartir"=>$row['compartir'],"codigo"=>$row['codigo']);
 		}
 		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 		header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Fecha en el pasado

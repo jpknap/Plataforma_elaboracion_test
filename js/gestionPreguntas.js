@@ -15,6 +15,19 @@ $(document).ready(function()
 
 
 });
+function cargarPregCompartida(){
+	var code = $("#codePregunta").val();
+	$.post('php/insertXML.php',{operacion:3,dat1:code} ,cargaPregCompartida,'json');
+
+}
+function cargaPregCompartida(data){
+		var preguntas="<tr><th>Titulo</th><th>Preview</th><th>Asignar</th></tr>";
+		 $.each(data, function(name, info){
+		 	preguntas +='<tr> <td>'+info.titulo+'</td><td><a  style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td> <button class="button_azul" onClick="asignarPreg('+info.id+')">Asignar</button></td> </tr>';
+		 	
+		});
+		 $("#tablaPreguntas").html(preguntas);
+}
 
 function editarPreg(idPreg,url){
 	sessionStorage.setItem('idPreguntaEdit',idPreg);
@@ -74,12 +87,31 @@ function removerTag(posTag){
 	}
 	$("#listaTags").html(codeTags)
 }
+function compartirPreg(element,id){
+		$.post('php/insertXML.php',{operacion:2,dat1:id},function(data){
+			$(element).replaceWith("<h3><b>"+data+"</b></h3>");
+			$('#edit'+id).removeAttr( "onClick" );
+			$('#edit'+id).removeAttr( "style" );
+			$('#editImg'+id).css({"opacity":"0.5","filter":"alpha(opacity=50)"});	
+			$('#preview'+id).prop( "onClick", null );			
+			$('#preview'+id).attr('onClick','cargarVelo("xmlPreguntas/'+data+'.xml")');
+
+
+
+		},'text');
+
+	
+}
 
 function procesarLecturaXML(data){
-		var preguntas="<tr><th>CODE</th><th>Titulo</th><th>Preview</th><th>Editar</th><th>compartir</th><th>Eliminar</th></tr>";
+		var preguntas="<tr><th>Titulo</th><th>Preview</th><th>Editar</th><th>compartir</th><th>Eliminar</th></tr>";
 		 $.each(data, function(name, info){
 		 	if(name != 'cantidad'){
-		 		preguntas +='<tr> <td>'+info.id+'</td><td>'+info.titulo+'</td><td><a  style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><a  style="cursor:pointer;" onClick=editarPreg("'+info.id+'","'+info.dirPreg+'");> <img height="30" width="30" src="images/edit.png"> </img></a></td> <td> <button class="button_azul">Compartir</button></td><td><button class="button_rojo">Eliminar</button></td> </tr>';
+		 		if(info.compartir==0)
+		 			preguntas +='<tr id="row'+info.id+'"> <td>'+info.titulo+'</td><td><a   id="preview'+info.id+'" style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><a  id="edit'+info.id+'" style="cursor:pointer;" onClick=editarPreg("'+info.id+'","'+info.dirPreg+'");> <img  id="editImg'+info.id+'" height="30" width="30" src="images/edit.png"> </img></a></td> <td> <button class="button_azul" onClick="compartirPreg(this,'+info.id+')">Compartir</button></td><td><button class="button_rojo" onClick="eliminarPregunta('+info.id+')">Eliminar</button></td> </tr>';
+		 		else
+		 			preguntas +='<tr id="row'+info.id+'"> <td>'+info.titulo+'</td><td><a  style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><a > <img height="30" width="30" src="images/edit.png" style="opacity:0.5; filter:alpha(opacity=50)"> </img></a></td> <td> <h3><b>'+info.codigo+'</b></h3></td><td><button class="button_rojo" onClick="eliminarPregunta('+info.id+')">Eliminar</button></td> </tr>';
+
 		 	}
 		 	else{
 		 		paginador(info.value);
@@ -152,3 +184,17 @@ function mensajeError(texto){
 		$("#notificacion_top_error").show(500).delay(1000).fadeOut();
 	}
 };
+function asignarPreg(id){
+	$.post('php/insertXML.php',{operacion:4,dat1:id,dat2:localStorage.idUser},'','text').fail(function(XMLHttpRequest, textStatus, errorThrown) {
+    mensajeError(""+XMLHttpRequest.responseText);
+
+  });
+}
+function eliminarPregunta(id){
+	$.post('php/insertXML.php',{operacion:5,dat1:id,dat2:localStorage.idUser},function(){
+		$('#row'+id).remove();
+	},'text').fail(function(XMLHttpRequest, textStatus, errorThrown) {
+    mensajeError(""+XMLHttpRequest.responseText);
+
+  });
+}
