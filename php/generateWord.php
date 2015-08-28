@@ -1,20 +1,11 @@
 <?php
-$Letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-
-	if(isset($_GET['idTest'])){			
+$Letters= array('A','B','C','D','E','F','G','H','I','J','K','L','M','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 		include "conexionBD.php";
+	if(isset($_GET['idTest'])){		
 		pasarWord($_GET['idTest']);
-		/*	header("Content-type: application/vnd.ms-word");
-			header("Content-Disposition: attachment;Filename=documento.doc");
-			header("Pragma: no-cache");
-			header("Expires: 0");
-			echo "<html>";
-			echo "<meta http-equiv=\'Content-Type\' content=\'text/html; charset=Windows-1252\'>";
-			echo "<body>";
-			echo "<b>Mi primer documento</b><br />";
-			echo "Aqu&iacute; va todo el testo que querais, en formato HTML</body>";
-			echo "</html>";*/
+
 	}
+
 	function pasarWord($idPrueba){
 	global $conexion;
 	global $Letters;
@@ -57,7 +48,8 @@ $Letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','Ñ','O','P','Q'
 }
 
 function generarWord($dataPrueba,$dataPregunta,$respuestas){
-
+header("Content-type: application/vnd.ms-word");
+header("Content-Disposition: attachment;Filename=prueba_".$dataPrueba.".doc");
 	echo "<html>";
 	echo "<meta http-equiv=\'Content-Type\'' content=\'text/html; charset='UTF-8'>";
 	echo "<body>";
@@ -70,7 +62,5 @@ function generarWord($dataPrueba,$dataPregunta,$respuestas){
 	echo "</body>";
 	echo "</html>";
 
-	header("Content-type: application/vnd.ms-word");
-	header("Content-Disposition: attachment;Filename=documento.doc");
 }
 ?>

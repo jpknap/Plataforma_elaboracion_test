@@ -7,13 +7,18 @@ var listaTags =[];
 var respuesta='';
 var idPreg='';
 var urlPreg='';
+var compartirPreg='';
 var ultimoNombreBusqueda='';
 
 var Letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 $(function(){
+
+		cargarLoading();
 		if((sessionStorage['idPreguntaEdit'] !=undefined || sessionStorage['urlPreguntaEdit']!=undefined)){
 			idPreg = sessionStorage['idPreguntaEdit'];
 			urlPreg = sessionStorage['urlPreguntaEdit'];
+			compartirPreg = sessionStorage['compartirPreguntaEdit'];
+			 sessionStorage.removeItem('compartirPreguntaEdit');
 			sessionStorage.removeItem('idPreguntaEdit');
 			sessionStorage.removeItem('urlPreguntaEdit');
 			$.post('php/tag.php',{operacion:1,dat1:ultimoNombreBusqueda,dat2:"pregunta",dat3:'ALL',dat4:localStorage.idUser},function(data){
@@ -25,6 +30,14 @@ $(function(){
 			},'json');
 
 			$.post('php/tag.php',{operacion:3,dat1:idPreg,dat2:localStorage.idUser},obtenerTagsPregunnta,'json');
+			if(compartirPreg==1){
+				$('#tituloPregunta').attr("disabled",true);
+				$('#idTextoAdicional').attr("disabled",true);
+				$('#textPregunta').attr("disabled",true);
+				$('#botonAgregar').attr("disabled",true);
+
+
+			}
 		}
 		else{
 			window.location.replace('administrarPregunta.html');
@@ -82,16 +95,20 @@ function procesarXML(d){
 
 function cargarAlternativas(){
 	var largoLista = listAlternativas.length;
-	var addToTable='<tr><th>Nº</th><th>Alternativa</th><th>Valor</th><th>Respuesta</th><th>Eliminar</th></tr>';
+	var addToTable='<tr><th>Nº</th><th>Alternativa</th><th>Respuesta</th><th>Eliminar</th></tr>';
 	for(var i =0 ;i<largoLista ; i++){
 		if(respuesta == listAlternativas[i].id){
-			 addToTable+= '<tr><td>'+Letters[i]+'</td><td>'+listAlternativas[i].text+'</td><td>'+listAlternativas[i].valor+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[i]+'" checked> <br></td> <td><button onclick=eliminarElemento('+i+')> Eliminar </button> <br></td></tr>';
+			 addToTable+= '<tr><td>'+Letters[i]+'</td><td>'+listAlternativas[i].text+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[i]+'" checked> <br></td> <td><button onclick=eliminarElemento('+i+') class="button_rojo"> Eliminar </button> <br></td></tr>';
 		}
 		else{
-			 addToTable+= '<tr><td>'+Letters[i]+'</td><td>'+listAlternativas[i].text+'</td><td>'+listAlternativas[i].valor+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[i]+'"> <br></td> <td><button onclick=eliminarElemento('+i+')> Eliminar </button> <br></td></tr>';
+			 addToTable+= '<tr><td>'+Letters[i]+'</td><td>'+listAlternativas[i].text+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[i]+'"> <br></td> <td><button onclick=eliminarElemento('+i+') class="button_rojo"> Eliminar </button> <br></td></tr>';
 		}
 	}
-	$("#tablaAlternativas").html(addToTable)
+	$("#tablaAlternativas").html(addToTable);
+	if(compartirPreg==1){
+
+		$('#tablaAlternativas *').attr('disabled', true);
+	}
 }
 function cargarTags(){
 	var codeTags='';
@@ -124,6 +141,7 @@ function cargarDatos(){
 	}
 	cargarAlternativas();
 	cargarTags();
+	cerrarLoading();
 
 }
 
@@ -135,14 +153,18 @@ function cargarTag(){
 };
 function asignarTag(){
 	var idTag=$("#seleccionTag").val();
-	var nombreTag=$("#seleccionTag option:selected").text();
-	var result = $.grep(listaTags, function(e){ return e.id == idTag; });
-	if(result.length == 0){
-		listaTags.push({id:idTag,nombre: nombreTag});
-		$("#listaTags").append('<li><a onClick="removerTag('+(listaTags.length-1)+')" class="tag">'+listaTags[listaTags.length-1].nombre+'</a></li>');
+	if(idTag>0){
+		var nombreTag=$("#seleccionTag option:selected").text();
+		var result = $.grep(listaTags, function(e){ return e.id == idTag; });
+		if(result.length == 0){
+			listaTags.push({id:idTag,nombre: nombreTag});
+			$("#listaTags").append('<li><a onClick="removerTag('+(listaTags.length-1)+')" class="tag">'+listaTags[listaTags.length-1].nombre+'</a></li>');
+		}
+		else
+			mensajeError("No puedes repetir el Tag a una misma pregunta.");
 	}
 	else
-		mensajeError("No puedes repetir el Tag a una misma pregunta.");
+		mensajeError("No puedes asignar un tag vacio.");
 }
 function removerTag(posTag){
 	listaTags.splice(posTag,1);
@@ -154,19 +176,30 @@ function removerTag(posTag){
 }
 function agregarAlternativa(){
 	var texto = $("#textAlternativaAgregar").val();
-	var valor = $("#valorAlternativaAgregar").val();	
-	listAlternativas.push({text: texto, valor: valor});
-	var posicionLetra = listAlternativas.length-1;
-	var addToTable= '<tr><td>'+Letters[posicionLetra]+'</td><td>'+texto+'</td><td>'+valor+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[posicionLetra]+'"> <br></td> <td><button onclick=eliminarElemento('+posicionLetra+')> Eliminar </button> <br></td></tr>';
-	$("#tablaAlternativas").append(addToTable);
+	if(texto !="" && texto !=" "){
+		var valor = $("#valorAlternativaAgregar").val();
+		var result = $.grep(listAlternativas, function(e){ return e.text == texto; });
+		if(result.length == 0){	
+			listAlternativas.push({text: texto, valor: valor});
+			var posicionLetra = listAlternativas.length-1;
+			var addToTable= '<tr><td>'+Letters[posicionLetra]+'</td><td>'+texto+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[posicionLetra]+'"> <br></td> <td><button class="button_rojo" onclick=eliminarElemento('+posicionLetra+')> Eliminar </button> <br></td></tr>';
+			$("#tablaAlternativas").append(addToTable);
+		}		
+		else{
+			mensajeError("No puedes agregar la misma alternativa");
+		}
 	}
+	else{
+		mensajeError("La alternativa debe contener texto");
+	}
+}
 
 function eliminarElemento(posicion){
 	listAlternativas.splice(posicion,1);
 	var largoLista = listAlternativas.length;
-	var addToTable='<tr><th>Nº</th><th>Alternativa</th><th>Valor</th><th>Respuesta</th><th>Eliminar</th></tr>';
+	var addToTable='<tr><th>Nº</th><th>Alternativa</th><th>Respuesta</th><th>Eliminar</th></tr>';
 	for(var i =0 ;i<largoLista ; i++){
-	 addToTable+= '<tr><td>'+Letters[i]+'</td><td>'+listAlternativas[i].text+'</td><td>'+listAlternativas[i].valor+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[i]+'"> <br></td> <td><button onclick=eliminarElemento('+i+')> Eliminar </button> <br></td></tr>';
+	 addToTable+= '<tr><td>'+Letters[i]+'</td><td>'+listAlternativas[i].text+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[i]+'"> <br></td> <td><button onclick=eliminarElemento('+i+') class="button_rojo"> Eliminar </button> <br></td></tr>';
 	}
 	$("#tablaAlternativas").html(addToTable)
 }
@@ -190,8 +223,45 @@ function remplazarCaracteresEspeciales(texto){
 	return texto;
 }
 function editarXMLSimpleChoice(){
-			var size = 0;
+		var titulo = $("input#tituloPregunta").val();
+		var pregunta = $("textarea#textPregunta").val();		
+		var correct =  $("input#radioRespuesta:checked").val();
+		if(titulo == "" || titulo ==" "){
+			mensajeError("Debes ingresar un titulo a la pregunta");
+			return false;
+		}
+		if(pregunta == "" || pregunta ==" "){
+			mensajeError("Debes ingresar el texto de la pregunta principal");
+			return false;
+		}
+		if(listAlternativas.length < 2){
+			mensajeError("Debes ingresar almenos dos alternativas");
+			return false;
+		}
+		if(correct == "" || correct ==" " || typeof correct === "undefined"){
+			mensajeError("Debes ingresar la respuesta de la pregunta");
+			return false;
+		}
+	if(compartirPreg==1){
 
+			cargarLoading();
+		editarPregCompartida();
+	}
+	else{
+
+			cargarLoading();
+		editarPregSimple();
+	}
+
+}
+function editarPregCompartida(){
+	$.post('php/insertXML.php',{operacion:6,dat1:idPreg,dat2:JSON.stringify(listaTags)},function(){
+		window.location.replace('administrarPregunta.html');
+	},'');
+
+}
+function editarPregSimple(){
+			var size = 0;
 			var largoLista = listAlternativas.length;
 		
 			var sizechoices = 0
@@ -319,6 +389,7 @@ function editarXMLSimpleChoice(){
 						$("#notificacion_top_ok").show(100).delay(1000).fadeOut(function(){ window.location.replace('administrarPregunta.html');});								
 					},
 					error: function(e) {
+						cerrarLoading();
 						console.log('Error :'+e);
 						
 					}

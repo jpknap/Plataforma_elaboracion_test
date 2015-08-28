@@ -15,6 +15,7 @@ $(document).ready(function()
 
 
 });
+
 function cargarPregCompartida(){
 	var code = $("#codePregunta").val();
 	$.post('php/insertXML.php',{operacion:3,dat1:code} ,cargaPregCompartida,'json');
@@ -29,9 +30,10 @@ function cargaPregCompartida(data){
 		 $("#tablaPreguntas").html(preguntas);
 }
 
-function editarPreg(idPreg,url){
+function editarPreg(idPreg,url,compartir){
 	sessionStorage.setItem('idPreguntaEdit',idPreg);
 	sessionStorage.setItem('urlPreguntaEdit',url);
+	sessionStorage.setItem('compartirPreguntaEdit',compartir);
 	window.location.href='editarPregunta.html';
 }
 function cargarVelo(urlXML){
@@ -108,9 +110,9 @@ function procesarLecturaXML(data){
 		 $.each(data, function(name, info){
 		 	if(name != 'cantidad'){
 		 		if(info.compartir==0)
-		 			preguntas +='<tr id="row'+info.id+'"> <td>'+info.titulo+'</td><td><a   id="preview'+info.id+'" style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><a  id="edit'+info.id+'" style="cursor:pointer;" onClick=editarPreg("'+info.id+'","'+info.dirPreg+'");> <img  id="editImg'+info.id+'" height="30" width="30" src="images/edit.png"> </img></a></td> <td> <button class="button_azul" onClick="compartirPreg(this,'+info.id+')">Compartir</button></td><td><button class="button_rojo" onClick="eliminarPregunta('+info.id+')">Eliminar</button></td> </tr>';
+		 			preguntas +='<tr id="row'+info.id+'"> <td>'+info.titulo+'</td><td><a   id="preview'+info.id+'" style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><a  id="edit'+info.id+'" style="cursor:pointer;" onClick=editarPreg("'+info.id+'","'+info.dirPreg+'",'+info.compartir+');> <img  id="editImg'+info.id+'" height="30" width="30" src="images/edit.png"> </img></a></td> <td> <button class="button_azul" onClick="compartirPreg(this,'+info.id+')">Compartir</button></td><td><button class="button_rojo" onClick="eliminarPregunta('+info.id+')">Eliminar</button></td> </tr>';
 		 		else
-		 			preguntas +='<tr id="row'+info.id+'"> <td>'+info.titulo+'</td><td><a  style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><a > <img height="30" width="30" src="images/edit.png" style="opacity:0.5; filter:alpha(opacity=50)"> </img></a></td> <td> <h3><b>'+info.codigo+'</b></h3></td><td><button class="button_rojo" onClick="eliminarPregunta('+info.id+')">Eliminar</button></td> </tr>';
+		 			preguntas +='<tr id="row'+info.id+'"> <td>'+info.titulo+'</td><td><a  style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><a  id="edit'+info.id+'" style="cursor:pointer;" onClick=editarPreg("'+info.id+'","'+info.dirPreg+'",'+info.compartir+');> <img  id="editImg'+info.id+'" height="30" width="30" src="images/edit.png"> </img></a></td> <td> <h3><b>'+info.codigo+'</b></h3></td><td><button class="button_rojo" onClick="eliminarPregunta('+info.id+')">Eliminar</button></td> </tr>';
 
 		 	}
 		 	else{
@@ -197,4 +199,27 @@ function eliminarPregunta(id){
     mensajeError(""+XMLHttpRequest.responseText);
 
   });
+}
+function eliminarPregunta(id){
+		$("#notificacion_top_confirmar_cambios").show(500);
+		var color = $("#row"+id).css("background-color");
+		$("#row"+id).css("background-color","#FD94AC");
+		$( "#Guardar" ).click(function() {
+			$('#Guardar').off('click');
+			$('#Cancelar').off('click');
+			$("#notificacion_top_confirmar_cambios").hide(500);
+			$.post('php/insertXML.php',{operacion:5,dat1:id,dat2:localStorage.idUser},function(){
+			$('#row'+id).remove();
+			},'text').fail(function(XMLHttpRequest, textStatus, errorThrown) {
+	    	mensajeError(""+XMLHttpRequest.responseText);
+		  
+			});
+		});
+		$( "#Cancelar" ).click(function() {		  
+		  $("#row"+id).css("background-color",color);
+		  $('#Guardar').off('click');
+		  $('#Cancelar').off('click');
+		  $("#notificacion_top_confirmar_cambios").hide(500);
+		
+		});
 }

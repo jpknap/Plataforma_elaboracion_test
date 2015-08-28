@@ -4,6 +4,7 @@ var ultimoNombreBusqueda='';
 
 var Letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 $(function() {
+
 	$.post('php/tag.php',{operacion:1,dat1:ultimoNombreBusqueda,dat2:"pregunta",dat3:'ALL',dat4:localStorage.idUser},function(data){
 		 var codeTags='';
 		 $.each(data, function(name, info){
@@ -12,6 +13,10 @@ $(function() {
 		 $("#seleccionTag").html(codeTags);
 	},'json');
 });
+function alertError(text){
+	$("#notificacion_top_error").text(text);
+	$("#notificacion_top_error").show(300).delay(1000).hide(300);
+}
 
 function cargarTag(){
 	ultimoNombreBusqueda=$('#nombreBusquedaTag').val();
@@ -21,14 +26,18 @@ function cargarTag(){
 };
 function asignarTag(){
 	var idTag=$("#seleccionTag").val();
-	var nombreTag=$("#seleccionTag option:selected").text();
-	var result = $.grep(listaTags, function(e){ return e.id == idTag; });
-	if(result.length == 0){
-		listaTags.push({id:idTag,nombre: nombreTag});
-		$("#listaTags").append('<li><a onClick="removerTag('+(listaTags.length-1)+')" class="tag">'+listaTags[listaTags.length-1].nombre+'</a></li>');
+	if(idTag>0){
+		var nombreTag=$("#seleccionTag option:selected").text();
+		var result = $.grep(listaTags, function(e){ return e.id == idTag; });
+		if(result.length == 0){
+			listaTags.push({id:idTag,nombre: nombreTag});
+			$("#listaTags").append('<li><a onClick="removerTag('+(listaTags.length-1)+')" class="tag">'+listaTags[listaTags.length-1].nombre+'</a></li>');
+		}
+		else
+			mensajeError("No puedes repetir el Tag a una misma pregunta.");
 	}
 	else
-		mensajeError("No puedes repetir el Tag a una misma pregunta.");
+		mensajeError("No puedes asignar un tag vacio.");
 }
 function removerTag(posTag){
 	listaTags.splice(posTag,1);
@@ -40,19 +49,30 @@ function removerTag(posTag){
 }
 function agregarAlternativa(){
 	var texto = $("#textAlternativaAgregar").val();
-	var valor = $("#valorAlternativaAgregar").val();	
-	listaPreguntas.push({text: texto, valor: valor});
-	var posicionLetra = listaPreguntas.length-1;
-	var addToTable= '<tr><td>'+Letters[posicionLetra]+'</td><td>'+texto+'</td><td>'+valor+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[posicionLetra]+'"> <br></td> <td><button onclick=eliminarElemento('+posicionLetra+')> Eliminar </button> <br></td></tr>';
-	$("#tablaAlternativas").append(addToTable);
+	if(texto !="" && texto !=" "){
+		var valor = $("#valorAlternativaAgregar").val();
+		var result = $.grep(listaPreguntas, function(e){ return e.text == texto; });
+		if(result.length == 0){	
+			listaPreguntas.push({text: texto, valor: valor});
+			var posicionLetra = listaPreguntas.length-1;
+			var addToTable= '<tr><td>'+Letters[posicionLetra]+'</td><td>'+texto+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[posicionLetra]+'"> <br></td> <td><button class="button_rojo" onclick=eliminarElemento('+posicionLetra+')> Eliminar </button> <br></td></tr>';
+			$("#tablaAlternativas").append(addToTable);
+		}		
+		else{
+			alertError("No puedes agregar la misma alternativa");
+		}
 	}
+	else{
+		alertError("La alternativa debe contener texto");
+	}
+}
 
 function eliminarElemento(posicion){
 	listaPreguntas.splice(posicion,1);
 	var largoLista = listaPreguntas.length;
-	var addToTable='<tr><th>Nº</th><th>Alternativa</th><th>Valor</th><th>Respuesta</th><th>Eliminar</th></tr>';
+	var addToTable='<tr><th>Nº</th><th>Alternativa</th><th>Respuesta</th><th>Eliminar</th></tr>';
 	for(var i =0 ;i<largoLista ; i++){
-	 addToTable+= '<tr><td>'+Letters[i]+'</td><td>'+listaPreguntas[i].text+'</td><td>'+listaPreguntas[i].valor+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[i]+'"> <br></td> <td><button onclick=eliminarElemento('+i+')> Eliminar </button> <br></td></tr>';
+	 addToTable+= '<tr><td>'+Letters[i]+'</td><td>'+listaPreguntas[i].text+'</td><td><input type="radio" id="radioRespuesta" name="group1" value="'+Letters[i]+'"> <br></td> <td><button class="button_rojo" onclick=eliminarElemento('+i+')> Eliminar </button> <br></td></tr>';
 	}
 	$("#tablaAlternativas").html(addToTable)
 }
@@ -76,9 +96,33 @@ function remplazarCaracteresEspeciales(texto){
 	
 	return texto;
 }
-
+function validarygenerar(){
+		var titulo = $("input#tituloPregunta").val();
+		var pregunta = $("textarea#textPregunta").val();		
+		var correct =  $("input#radioRespuesta:checked").val();
+		if(titulo == "" || titulo ==" "){
+			mensajeError("Debes ingresar un titulo a la pregunta");
+			return false;
+		}
+		if(pregunta == "" || pregunta ==" "){
+			mensajeError("Debes ingresar el texto de la pregunta principal");
+			return false;
+		}
+		if(listaPreguntas.length < 2){
+			mensajeError("Debes ingresar almenos dos alternativas");
+			return false;
+		}
+		console.log(correct);
+		if(correct == "" || correct ==" " || typeof correct === "undefined"){
+			mensajeError("Debes ingresar la respuesta de la pregunta");
+			return false;
+		}
+		generarXMLSimpleChoice();
+}
 
 function generarXMLSimpleChoice(){
+
+			cargarLoading();
 			var size = 0;
 
 			var largoLista = listaPreguntas.length;
@@ -198,14 +242,13 @@ function generarXMLSimpleChoice(){
 			
 			
 			
-			
 			$.ajax({
 					type: "POST",
 					url:"php/insertXML.php",
 					data: envio,
 					async: false,
-					success: function(respuesta){
-						//$("#notificacion_top_ok").show(100).delay(1000).fadeOut(function(){ location.href = 'crearPregunta.html';});								
+					success: function(respuesta){						
+						$("#notificacion_top_ok").show(100).delay(500).fadeOut(function(){ location.href = 'crearPregunta.html';});								
 					},
 					error: function(e) {
 						console.log('Error :'+e);

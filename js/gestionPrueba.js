@@ -15,6 +15,27 @@ $(document).ready(function()
 
 
 });
+function eliminarPrueba(idPrueba){
+		$("#notificacion_top_confirmar_cambios").show(500);
+		var color = $("#row"+idPrueba).css("background-color");
+		$("#row"+idPrueba).css("background-color","#FD94AC");
+		$( "#Guardar" ).click(function() {
+		  console.log( "Handler for .click() called." );
+		  $('#Guardar').off('click');
+		  $('#Cancelar').off('click');
+		  $("#row"+idPrueba).remove();
+		  $("#notificacion_top_confirmar_cambios").hide(500);
+		$.post('php/prueba.php',{operacion:8,dat1:idPrueba},'','');
+		  
+		});
+		$( "#Cancelar" ).click(function() {		  
+		  $("#row"+idPrueba).css("background-color",color);
+		  $('#Guardar').off('click');
+		  $('#Cancelar').off('click');
+		  $("#notificacion_top_confirmar_cambios").hide(500);
+		
+		});
+}
 
 function editarPrueba(idPrueba){
 	sessionStorage.setItem('idPruebaEdit',idPrueba);
@@ -56,7 +77,7 @@ function procesarLecturaXML(data){
 		var preguntas="<tr><th>Titulo</th><th>Descripcion</th><th>Fecha</th><th>Editar</th><th>Eliminar</th></tr>";
 		 $.each(data, function(name, info){
 		 	if(name != 'cantidad'){
-		 		preguntas +='<tr><td width=350 >'+info.titulo+'</td><td><a  style="cursor:pointer;" onClick=cargarDescripcion("'+encodeURIComponent(info.titulo)+'","'+encodeURIComponent(info.descripcion)+'");><img height="30" width="30" src="images/lupa.png"> </img></a><td>'+info.fecha+'</td></td><td><a  style="cursor:pointer;" onClick=editarPrueba("'+info.id+'");> <img height="30" width="30" src="images/edit.png"> </img></a></td><td><button class="button_rojo">Eliminar</button></td> </tr>';
+		 		preguntas +='<tr id="row'+info.id+'"><td width=350 >'+info.titulo+'</td><td><a  style="cursor:pointer;" onClick=cargarDescripcion("'+encodeURIComponent(info.titulo)+'","'+encodeURIComponent(info.descripcion)+'");><img height="30" width="30" src="images/lupa.png"> </img></a><td>'+info.fecha+'</td></td><td><a  style="cursor:pointer;" onClick=editarPrueba("'+info.id+'");> <img height="30" width="30" src="images/edit.png"> </img></a></td><td><button onclick="eliminarPrueba('+info.id+');" class="button_rojo">Eliminar</button></td> </tr>';
 		 	}
 		 	else{
 		 		paginador(info.value);

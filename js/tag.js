@@ -8,9 +8,21 @@ $(document).ready(function()
 
 
 });
+
+function mensajeError(texto){
+	if(!$("#notificacion_top_error").is(':visible')){
+		$("#notificacion_top_error").text(texto);
+		$("#notificacion_top_error").show(500).delay(1000).fadeOut();
+	}
+};
 function agregarTag(){
-	$.post('php/tag.php',{operacion:0,dat1:''+$('#nombreAgregar').val(),dat2:''+$('#tipoAgregar').val(), dat3:localStorage.idUser},'').done(function(){cargarTag(paginaActual)});
-	$('#nombreAgregar').val('');
+	if($('#nombreAgregar').val()!="" && $('#nombreAgregar').val()!=" " ){
+		$.post('php/tag.php',{operacion:0,dat1:''+$('#nombreAgregar').val(),dat2:''+$('#tipoAgregar').val(), dat3:localStorage.idUser},'').done(function(){cargarTag(paginaActual)});
+		$('#nombreAgregar').val('');
+	}
+	else{
+		mensajeError("No puedes agregar un tag con nombre vacio");
+	}
 
 };
 function cargarTag(pag){

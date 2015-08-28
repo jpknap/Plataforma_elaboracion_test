@@ -8,6 +8,7 @@ include "conexionBD.php";
 				case 3:buscarPregCompartida ($_POST['dat1']);break;
 				case 4: asignarPregunta ($_POST['dat1'],$_POST['dat2']);break;
 				case 5: eliminarPregunta ($_POST['dat1'],$_POST['dat2']);break;
+				case 6: agregarTagPregunta ($_POST['dat1'],$_POST['dat2']);break;
 			}
 		}
 
@@ -36,9 +37,11 @@ include "conexionBD.php";
 
 		function actualizarXML($id,$urlXML,$xml,$tags,$titulo){
 			global $conexion;	
-			$pregunta=fopen("../".$urlXML,"w+") or die ("No se puede crear el archivo");
+			$pregunta=fopen("../".$urlXML,"w+") or die ("No se puede crear el archivo");		
 			fwrite($pregunta,$xml);
 			fclose($pregunta);
+			$sql2='UPDATE pregunta SET titulo="'.$titulo.'" WHERE id='.$id.';';
+			mysql_query($sql2,$conexion);
 			$sql='DELETE FROM pregunta_tag WHERE id_pregunta='.$id.';';
 			$query = mysql_query($sql,$conexion);
 			agregarTagPregunta($id,$tags);			

@@ -10,6 +10,7 @@ if($_POST['operacion'] !=""){
 		case 5: cargarTagsPruebaSimple($_POST['dat1']); break;
 		case 6: cargarPreguntasPruebaSimple($_POST['dat1']);break;
 		case 7: editarPrueba($_POST['dat1'],$_POST['dat2'],$_POST['dat3'],$_POST['dat4'],$_POST['dat5'],$_POST['dat6']);break;
+		case 8: eliminarPrueba($_POST['dat1']);break;
 	}
 }
 function generarPrueba($idUser, $titulo, $descripcion, $tags, $listaPreguntas){
@@ -193,17 +194,18 @@ function editarPrueba($idUser, $titulo, $descripcion, $tags, $listaPreguntas,$id
 	global $conexion;	
 	$sql= 'DELETE FROM prueba WHERE id='.$idOld;
 
-	mysql_query($sql,$conexion) or die ("Error in query: $query. ".mysql_error());
-
-
-
+	if(mysql_query($sql,$conexion) ){
 		$sql= 'INSERT INTO prueba(id_usuario,titulo,descripcion,fechaCreacion) VALUES ('.$idUser.',"'.$titulo.'","'.$descripcion.'",'.'"'.date("Y-m-d H:i:s").'");';
 		mysql_query($sql,$conexion) or die ("Error in query: $query. ".mysql_error());
 			$id = mysql_insert_id($conexion);;
 			agregarTagPrueba($id,$tags);
 			agregarPreguntaPrueba($id,$listaPreguntas);
-
-		
+		}
+}
+function eliminarPrueba($id){
+	global $conexion;	
+	$sql= 'DELETE FROM prueba WHERE id='.$id;
+	mysql_query($sql,$conexion) or die ("Error in query: $query. ".mysql_error());
 	
 }
 ?>
