@@ -3,6 +3,8 @@ var nPreg=1;
 var urlPreg = [];
 $(document).ready(function()
 		{
+
+			cargarLoading();
 			var idPrueba = localStorage['idPruebaPrint'];
 			localStorage.removeItem('idPruebaPrint');
 			$.post('php/prueba.php',{operacion:2,dat1:idPrueba } ,asignar,'json');
@@ -70,4 +72,6 @@ function procesarXML(d){
 				procesarXML(data);
 		});
 	}
+	else
+	 	cerrarLoading();
 }

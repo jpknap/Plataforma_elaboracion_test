@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<assessmentItem adaptive="false" timeDependent="false" label="mylabel" title="3" identifier="choice" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd" xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:lip="http://www.imsglobal.org/xsd/imslip_v1p0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Matd/MatdML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="identifier">
+      <correctResponse>
+         <value>A</value>
+      </correctResponse>
+      <mapping defaultValue="0">
+         <mapEntry mapKey="A" mappedValue="1" />
+         <mapEntry mapKey="B" mappedValue="1" />
+      </mapping>
+   </responseDeclaration>
+   <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float" />
+   <itemBody>
+      <choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1">
+         <prompt>3</prompt>
+         <simpleChoice fixed="false" identifier="A">3</simpleChoice>
+         <simpleChoice fixed="false" identifier="B">4</simpleChoice>
+      </choiceInteraction>
+   </itemBody>
+   <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_response" />
+</assessmentItem>

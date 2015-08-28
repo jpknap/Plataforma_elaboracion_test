@@ -2,15 +2,19 @@
 include "conexionBD.php";
 if($_POST['operacion'] !=""){
 	switch($_POST['operacion']){
-		case 0: cargarPreguntas($_POST['dat1'],$_POST['dat2'],$_POST['dat3'],$_POST['dat4']); break;
+		case 0: cargarPreguntas($_POST['dat1'],$_POST['dat2'],$_POST['dat3'],$_POST['dat4'],$_POST['dat5']); break;
 	}
 }
-function cargarPreguntas($hoja,$titulo,$tags,$idUser){
+function cargarPreguntas($hoja,$titulo,$tags,$idUser,$orden){
 		global $conexion;
 		$dataTag = json_decode($tags,true);
 		$tagSql='';
 		$cantTag=count($dataTag);		
 		$tagSql2='';
+		$ordenamiento='DESC';
+		if(isset($orden)){
+			$ordenamiento=$orden;
+		}
 		if($cantTag>0){
 
 			$tagSql2='having count(*)='.$cantTag;
@@ -28,11 +32,11 @@ function cargarPreguntas($hoja,$titulo,$tags,$idUser){
 		$query1 = mysql_query($sql_id,$conexion) or die ("Error in query: $query. ".mysql_error());
 		$data['cantidad']=array("value"=>mysql_num_rows($query1));
 
-		$sql_id = 'SELECT a.id as id , a.titulo as titulo, a.url as url, a.compartir as compartir, a.codigo as codigo FROM pregunta_user z,pregunta a  left JOIN pregunta_tag  on 1 WHERE z.id_usuario='.$idUser.' AND z.eliminada=0  AND z.id_pregunta = a.id and a.titulo LIKE "%'.$titulo.'%" '.$tagSql.' GROUP BY id '.$tagSql2.' LIMIT '.$cant_Hoja*($hoja-1).','.$cant_Hoja.';';  // <---- OJO! 
+		$sql_id = 'SELECT a.id as id , a.titulo as titulo, a.url as url, a.compartir as compartir, a.codigo as codigo,date_format(z.fechaUltima ,"%d-%m-%Y") as fecha FROM pregunta_user z,pregunta a  left JOIN pregunta_tag  on 1 WHERE z.id_usuario='.$idUser.' AND z.eliminada=0  AND z.id_pregunta = a.id and a.titulo LIKE "%'.$titulo.'%" '.$tagSql.' GROUP BY id '.$tagSql2.' ORDER BY fechaUltima '.$ordenamiento.' , titulo  LIMIT '.$cant_Hoja*($hoja-1).','.$cant_Hoja.';';  // <---- OJO! 
 		$query1 = mysql_query($sql_id,$conexion) or die ("Error in query: $query. ".mysql_error());
 		//$resp=mysql_result($query1);
 		while ($row = mysql_fetch_assoc($query1, MYSQL_ASSOC)) {
-			$data[]=array("dirPreg"=>$row['url'],"id"=>$row['id'],"titulo"=>$row['titulo'],"compartir"=>$row['compartir'],"codigo"=>$row['codigo']);
+			$data[]=array("dirPreg"=>$row['url'],"id"=>$row['id'],"titulo"=>$row['titulo'],"compartir"=>$row['compartir'],"codigo"=>$row['codigo'],"fecha"=>$row['fecha']);
 		}
 		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 		header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Fecha en el pasado

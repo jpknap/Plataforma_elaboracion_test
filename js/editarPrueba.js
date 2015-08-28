@@ -3,6 +3,8 @@ var listaTags = [];
 var listaTagsBusqueda = [];
 var paginaActual=1;
 var idPrueba;
+
+var orden="DESC";
 $(function()
 	{
 	//$.post('php/cargarPreguntas.php',{operacion:0,dat1:1,dat2:'',dat3:JSON.stringify(listaTags),dat4:localStorage.idUser } ,procesarLecturaXML,'json');
@@ -105,11 +107,27 @@ function reloadTag(){
 	$("#listaTags").html(codeTags)
 }
 // fin funciones tag prueba
+var lastIMGorden="images/arrowDown.png";
+
+function ordenamientoFechas(element){
+	var imagen = $(element).find('img').attr('src');
+	if(imagen == "images/arrowDown.png"){
+		lastIMGorden ='images/arrowUp.png';
+		orden="ASC";
+
+	}
+	else{	
+		lastIMGorden ='images/arrowDown.png';
+		orden="DESC";
+	}
+	$.post('php/cargarPreguntas.php',{operacion:0,dat1:1,dat2:tituloBuscar,dat3:JSON.stringify(listaTagsBusqueda),dat4:localStorage.idUser,dat5:orden},procesarLecturaXML,'json');
+
+}
 function procesarLecturaXML(data){
-		var preguntas='<tr><th width="20%" >CODE</th><th width="50%">Titulo</th><th width="10%">Preview</th><th width="20%">Asignar</th></tr>';
+		var preguntas='<tr>><th width="50%">Titulo</th><th><a onclick="ordenamientoFechas(this)" style="cursor:pointer;">Fecha <img  height="15" width="20" src='+lastIMGorden+'></img></a></th><th width="10%">Preview</th><th width="20%">Asignar</th></tr>';
 		 $.each(data, function(name, info){
 		 	if(name != 'cantidad'){
-		 		preguntas +='<tr> <td>'+info.id+'</td><td>'+info.titulo+'</td><td><a  style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><a  style="cursor:pointer;" onClick=asignarPregunta("'+encodeURI(info.titulo)+'","'+info.id+'","'+info.dirPreg+'");> <img height="30" width="30" src="images/edit.png"> </img></a></td></tr>';
+		 		preguntas +='<tr> <td>'+info.titulo+'</td><td>'+info.fecha+'</td><td><a  style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><button class="button_azul"  onClick=asignarPregunta("'+encodeURI(info.titulo)+'","'+info.id+'","'+info.dirPreg+'");>Asignar</button></td></tr>';
 		 	}
 		 	else{
 		 		paginador(info.value);
@@ -148,7 +166,7 @@ function cargarVelo(urlXML){
 function filtrarPreg(){
 	tituloBuscar=$("#tituloPreguntaBuscar").val();
 	paginaActual=1;
-	$.post('php/cargarPreguntas.php',{operacion:0,dat1:1,dat2:tituloBuscar,dat3:JSON.stringify(listaTagsBusqueda),dat4:localStorage.idUser },procesarLecturaXML,'json');
+	$.post('php/cargarPreguntas.php',{operacion:0,dat1:1,dat2:tituloBuscar,dat3:JSON.stringify(listaTagsBusqueda),dat4:localStorage.idUser,dat5:orden},procesarLecturaXML,'json');
 }
 ///funciones a la gestion y asignacion de preguntas de una prueba
 function asignarPregunta(titulo,id, url){
@@ -216,12 +234,12 @@ function ultimasPaginas(numero,nPag){
 	var string='';
 	var codeHTML=[]
 		for(var j = nPag-(5-numero); j > 0 && j >= paginaActual-numero; j--){
-				codeHTML.push('<li><a href="#" onClick="llamadaPhpPagina('+j+');">'+j+'</a></li>');
+				codeHTML.push('<li><a href="#pagination-flickr" onClick="llamadaPhpPagina('+j+');">'+j+'</a></li>');
 	}
 	string+= codeHTML.reverse().toString().replace(/,/g,'');
 	string+= '<li class="active">'+paginaActual+'</li>';
 	for(var i = 1; i <= 4-numero ; i++){
-		string +='<li><a href="#" onClick="llamadaPhpPagina('+(i+paginaActual)+');">'+(i+paginaActual)+'</a></li>';
+		string +='<li><a href="#pagination-flickr" onClick="llamadaPhpPagina('+(i+paginaActual)+');">'+(i+paginaActual)+'</a></li>';
 	}
 	return string;
 }
@@ -231,8 +249,8 @@ function paginador (cant){
 	var htmlPag ='';
 	var nPag= Math.ceil(cant/10);
 	if(paginaActual > 1){
-		htmlPag+='<li class="next"><a href="#"  onClick="llamadaPhpPagina(1);">««</a></li>';
-		htmlPag+= '<li class="previous"><a href="#"  onClick="llamadaPhpPagina('+(paginaActual-1)+');"> «Anterior</a> </li>';
+		htmlPag+='<li class="next"><a href="#pagination-flickr"  onClick="llamadaPhpPagina(1);">««</a></li>';
+		htmlPag+= '<li class="previous"><a href="#pagination-flickr"  onClick="llamadaPhpPagina('+(paginaActual-1)+');"> «Anterior</a> </li>';
 		
 	}
 	else{
@@ -251,16 +269,17 @@ function paginador (cant){
 		}
 		else
 			if(i == paginaActual)		
-				htmlPag+= '<li class="active">'+i+'</li>';
-			else
-				htmlPag+= '<li><a href="#" onClick="llamadaPhpPagina('+i+');">'+i+'</li>';
+				htmlPag+= '<li class="active">'+i+'</li>';		
+
+					else
+				htmlPag+= '<li><a href="#pagination-flickr" onClick="llamadaPhpPagina('+i+');">'+i+'</li>';
 	}
 	if(paginaActual < nPag){
-  		htmlPag+='<li class="next"><a href="#"  onClick="llamadaPhpPagina('+(paginaActual+1)+');">Siguiente» </a></li>';               
-  		htmlPag+='<li class="next"><a  href="#" onClick="llamadaPhpPagina('+nPag+');">»»</a></li>';}
+  		htmlPag+='<li class="next"><a href="#pagination-flickr"  onClick="llamadaPhpPagina('+(paginaActual+1)+');">Siguiente» </a></li>';               
+  		htmlPag+='<li class="next"><a  href="#pagination-flickr" onClick="llamadaPhpPagina('+nPag+');">»»</a></li>';}
   	else {
   		htmlPag+='<li class="next-off">Siguiente» </li>';
-  		htmlPag+='<li class="next-off">»»</li>';}               
+  		htmlPag+='<li class="next-off">»»</li>';}                
   	
 
   $("ul#pagination-flickr").html(htmlPag);
@@ -268,6 +287,6 @@ function paginador (cant){
 }
 function llamadaPhpPagina(numero){
 	paginaActual=numero;
-	$.post('php/cargarPreguntas.php',{operacion:0,dat1:numero,dat2:tituloBuscar,dat3:JSON.stringify(listaTags)},procesarLecturaXML,'json');
-
+	$.post('php/cargarPreguntas.php',{operacion:0,dat1:numero,dat2:tituloBuscar,dat3:JSON.stringify(listaTagsBusqueda),dat4:localStorage.idUser,dat5:orden},procesarLecturaXML,'json');
+window.location.hash = '#pagination-flickr';	
 }

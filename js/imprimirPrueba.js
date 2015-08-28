@@ -1,10 +1,11 @@
 var paginaActual=1;
 var tituloBuscar='';
 var listaTags = [];
+var orden="DESC";
 $(document).ready(function()
 		{
 			tituloBuscar=$("#tituloPreguntaBuscar").val();
-			$.post('php/prueba.php',{operacion:1,dat1:1,dat2:tituloBuscar,dat3:JSON.stringify(listaTags),dat4:localStorage.idUser } ,procesarLecturaXML,'json');
+			$.post('php/prueba.php',{operacion:1,dat1:1,dat2:tituloBuscar,dat3:JSON.stringify(listaTags),dat4:localStorage.idUser,dat5:orden },procesarLecturaXML,'json');
 			$.post('php/tag.php',{operacion:1,dat1:'',dat2:"prueba",dat3:'ALL',dat4:localStorage.idUser},function(data){
 				 var codeTags='';
 				 $.each(data, function(name, info){
@@ -36,7 +37,7 @@ function cargarDescripcion(titulo,descripcion){
 function filtrarPreg(){
 	tituloBuscar=$("#tituloPreguntaBuscar").val();
 	paginaActual=1;
-	$.post('php/prueba.php',{operacion:1,dat1:1,dat2:tituloBuscar,dat3:JSON.stringify(listaTags),dat4:localStorage.idUser },procesarLecturaXML,'json');
+	$.post('php/prueba.php',{operacion:1,dat1:1,dat2:tituloBuscar,dat3:JSON.stringify(listaTags),dat4:localStorage.idUser,dat5:orden },procesarLecturaXML,'json');
 }
 
 function asignarTag(){
@@ -58,12 +59,27 @@ function removerTag(posTag){
 	}
 	$("#listaTags").html(codeTags)
 }
+var lastIMGorden="images/arrowDown.png";
+
+function ordenamientoFechas(element){
+	var imagen = $(element).find('img').attr('src');
+	if(imagen == "images/arrowDown.png"){
+		lastIMGorden ='images/arrowUp.png';
+		orden="ASC";
+	}
+	else{	
+		orden="DESC";
+		lastIMGorden ='images/arrowDown.png';
+	}
+	$.post('php/prueba.php',{operacion:1,dat1:1,dat2:tituloBuscar,dat3:JSON.stringify(listaTags),dat4:localStorage.idUser,dat5:orden },procesarLecturaXML,'json');
+
+}
 
 function procesarLecturaXML(data){
-		var preguntas="<tr><th>Titulo</th><th>Descripcion</th><th>Fecha</th><th>ver Online</th><th>ver Word</th></tr>";
+		var preguntas="<tr><th>Titulo</th><th><a onclick='ordenamientoFechas(this)' style='cursor:pointer;'>Fecha <img  height='15' width='20' src="+lastIMGorden+"></img></a></th><th>Descripcion</th><th>ver Online</th><th>ver Word</th></tr>";
 		 $.each(data, function(name, info){
 		 	if(name != 'cantidad'){
-		 		preguntas +='<tr><td width=350 >'+info.titulo+'</td><td><a  style="cursor:pointer;" onClick=cargarDescripcion("'+encodeURIComponent(info.titulo)+'","'+encodeURIComponent(info.descripcion)+'");><img height="30" width="30" src="images/lupa.png"> </img></a><td>'+info.fecha+'</td></td><td><a  style="cursor:pointer;" onClick=printPrueba("'+info.id+'");> <img height="40" width="40" src="images/paper.png"> </img></a></td><td><a  style="cursor:pointer;" onClick=genWord("'+info.id+'");><img height="30" width="30" src="images/word.png"></a></td> </tr>';}
+		 		preguntas +='<tr><td width=350 >'+info.titulo+'</td><td>'+info.fecha+'</td><td><a  style="cursor:pointer;" onClick=cargarDescripcion("'+encodeURIComponent(info.titulo)+'","'+encodeURIComponent(info.descripcion)+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><a  style="cursor:pointer;" onClick=printPrueba("'+info.id+'");> <img height="40" width="40" src="images/paper.png"> </img></a></td><td><a  style="cursor:pointer;" onClick=genWord("'+info.id+'");><img height="30" width="30" src="images/word.png"></a></td> </tr>';}
 		 	else{
 		 		paginador(info.value);
 		 	}
@@ -126,7 +142,7 @@ function paginador (cant){
 }
 function llamadaPhpPagina(numero){
 	paginaActual=numero;
-	$.post('php/prueba.php',{operacion:1,dat1:numero,dat2:tituloBuscar,dat3:JSON.stringify(listaTags)},procesarLecturaXML,'json');
+	$.post('php/prueba.php',{operacion:1,dat1:numero,dat2:tituloBuscar,dat3:JSON.stringify(listaTags),dat4:localStorage.idUser,dat5:orden },procesarLecturaXML,'json');
 
 }
 function mensajeError(texto){

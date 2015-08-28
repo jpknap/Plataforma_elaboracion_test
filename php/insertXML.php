@@ -3,12 +3,12 @@ include "conexionBD.php";
 		if($_POST['operacion'] !=""){
 			switch($_POST['operacion']){
 				case 0: generarXML($_POST['dat1'],$_POST['dat2'],$_POST['dat3'],$_POST['dat4']); break;
-				case 1: actualizarXML($_POST['dat1'],$_POST['dat2'],$_POST['dat3'],$_POST['dat4'],$_POST['dat5']); break;
+				case 1: actualizarXML($_POST['dat1'],$_POST['dat2'],$_POST['dat3'],$_POST['dat4'],$_POST['dat5'],$_POST['dat6']); break;
 				case 2: compartirPregunta($_POST['dat1']); break;
-				case 3:buscarPregCompartida ($_POST['dat1']);break;
+				case 3: buscarPregCompartida ($_POST['dat1']);break;
 				case 4: asignarPregunta ($_POST['dat1'],$_POST['dat2']);break;
 				case 5: eliminarPregunta ($_POST['dat1'],$_POST['dat2']);break;
-				case 6: agregarTagPregunta ($_POST['dat1'],$_POST['dat2']);break;
+				case 6: agregarTagPregunta ($_POST['dat1'],$_POST['dat2'],$_POST['dat3']);break;
 			}
 		}
 
@@ -27,7 +27,7 @@ include "conexionBD.php";
 
 			fwrite($pregunta,$dato);
 			fclose($pregunta);
-			$sql2='INSERT INTO pregunta_user(id_usuario,id_pregunta,eliminada) VALUES('.$idUser.','.$id.', 0 );';
+			$sql2='INSERT INTO pregunta_user(id_usuario,id_pregunta,eliminada,fechaUltima) VALUES('.$idUser.','.$id.', 0, "'.date("Y-m-d").'");';
 			echo $sql2;
 			$query = mysql_query($sql2,$conexion);	
 			agregarTagPregunta($id,$tags);
@@ -35,21 +35,27 @@ include "conexionBD.php";
 			}
 		}
 
-		function actualizarXML($id,$urlXML,$xml,$tags,$titulo){
+		function actualizarXML($id,$urlXML,$xml,$tags,$titulo,$idUser){
 			global $conexion;	
 			$pregunta=fopen("../".$urlXML,"w+") or die ("No se puede crear el archivo");		
 			fwrite($pregunta,$xml);
 			fclose($pregunta);
 			$sql2='UPDATE pregunta SET titulo="'.$titulo.'" WHERE id='.$id.';';
 			mysql_query($sql2,$conexion);
-			$sql='DELETE FROM pregunta_tag WHERE id_pregunta='.$id.';';
-			$query = mysql_query($sql,$conexion);
+			$sql2='UPDATE pregunta_user SET fechaUltima="'.date("Y-m-d").'" WHERE id_pregunta='.$id.' AND id_usuario='.$idUser.';';
+			mysql_query($sql2,$conexion);
 			agregarTagPregunta($id,$tags);			
 		}
 
 
-		function agregarTagPregunta($id,$tags){
+		function agregarTagPregunta($id,$tags,$idUser){
 			global $conexion;	
+			if(isset($idUser)){
+				$sql2='UPDATE pregunta_user SET fechaUltima="'.date("Y-m-d").'" WHERE id_pregunta='.$id.' AND id_usuario='.$idUser.';';
+				mysql_query($sql2,$conexion);
+			}
+			$sql='DELETE FROM pregunta_tag WHERE id_pregunta='.$id.';';
+			$query = mysql_query($sql,$conexion);
 			$data = json_decode($tags,true);
 			$sql='';
 			for($i=0;$i<count($data);$i++){
@@ -106,7 +112,7 @@ include "conexionBD.php";
 		}
 		function asignarPregunta($id, $idUser){
 			global $conexion;
-			$sql_id = 'INSERT INTO pregunta_user (id_usuario,id_pregunta,eliminada) VALUES ('.$idUser.','.$id.',0);';  // <---- OJO! 
+			$sql_id = 'INSERT INTO pregunta_user (id_usuario,id_pregunta,eliminada, fechaUltima) VALUES ('.$idUser.','.$id.',0,"'.date("Y-m-d").'");';  // <---- OJO! 
 			if(!mysql_query($sql_id,$conexion)){
 
 				$sql_id = 'UPDATE pregunta_user set eliminada=0 where id_usuario='.$idUser.' AND id_pregunta='.$id.';';  // <---- OJO! 

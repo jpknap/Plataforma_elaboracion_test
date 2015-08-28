@@ -3,14 +3,14 @@ include "conexionBD.php";
 if($_POST['operacion'] !=""){
 	switch($_POST['operacion']){
 		case 0: generarPrueba($_POST['dat1'],$_POST['dat2'],$_POST['dat3'],$_POST['dat4'],$_POST['dat5']); break;
-		case 1: cargarPrueba($_POST['dat1'],$_POST['dat2'],$_POST['dat3'],$_POST['dat4']); break;
+		case 1: cargarPrueba($_POST['dat1'],$_POST['dat2'],$_POST['dat3'],$_POST['dat4'],$_POST['dat5']); break;
 		case 2: cargarPruebaImpresion($_POST['dat1']); break;
 		case 3: generarWord($_POST['dat1']); break;
 		case 4: cargarPruebaSimple($_POST['dat1']); break;
 		case 5: cargarTagsPruebaSimple($_POST['dat1']); break;
 		case 6: cargarPreguntasPruebaSimple($_POST['dat1']);break;
 		case 7: editarPrueba($_POST['dat1'],$_POST['dat2'],$_POST['dat3'],$_POST['dat4'],$_POST['dat5'],$_POST['dat6']);break;
-		case 8: eliminarPrueba($_POST['dat1']);break;
+		case 8: eliminarPrueba($_POST['dat1']);break;		
 	}
 }
 function generarPrueba($idUser, $titulo, $descripcion, $tags, $listaPreguntas){
@@ -44,12 +44,16 @@ function agregarPreguntaPrueba($id,$listaPreguntas){
 		
 }
 
-function cargarPrueba($hoja,$titulo,$tags,$idUser){
+function cargarPrueba($hoja,$titulo,$tags,$idUser,$orden){
 		global $conexion;
 		$dataTag = json_decode($tags,true);
 		$tagSql='';
 		$cantTag=count($dataTag);		
 		$tagSql2='';
+		$ordenamiento = "DESC";
+		if(isset($orden)){
+			$ordenamiento = $orden;
+		}
 		if($cantTag>0){
 
 			$tagSql2='having count(*)='.$cantTag;
@@ -69,7 +73,7 @@ function cargarPrueba($hoja,$titulo,$tags,$idUser){
 		$query1 = mysql_query($sql_id,$conexion) or die ("Error in query: $query. ".mysql_error());
 		$data['cantidad']=array("value"=>mysql_num_rows($query1));
 
-		$sql_id = 'SELECT id as id , titulo as titulo, descripcion as descripcion ,date_format(fechaCreacion,"%d-%m-%Y") as fecha  FROM prueba a  left JOIN prueba_tag  on 1 WHERE a.id_usuario='.$idUser.'  and a.titulo LIKE "%'.$titulo.'%" '.$tagSql.'  GROUP BY id '.$tagSql2.' order by fechaCreacion DESC LIMIT '.$cant_Hoja*($hoja-1).','.$cant_Hoja.' ;';  // <---- OJO! 
+		$sql_id = 'SELECT id as id , titulo as titulo, descripcion as descripcion ,date_format(fechaCreacion,"%d-%m-%Y") as fecha  FROM prueba a  left JOIN prueba_tag  on 1 WHERE a.id_usuario='.$idUser.'  and a.titulo LIKE "%'.$titulo.'%" '.$tagSql.'  GROUP BY id '.$tagSql2.' order by fechaCreacion '.$ordenamiento.' , titulo LIMIT '.$cant_Hoja*($hoja-1).','.$cant_Hoja.' ;';  // <---- OJO! 
 		$query1 = mysql_query($sql_id,$conexion) or die ("Error in query: $query. ".mysql_error());
 		//$resp=mysql_result($query1);
 		while ($row = mysql_fetch_assoc($query1, MYSQL_ASSOC)) {

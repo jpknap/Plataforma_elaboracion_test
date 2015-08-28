@@ -255,7 +255,7 @@ function editarXMLSimpleChoice(){
 
 }
 function editarPregCompartida(){
-	$.post('php/insertXML.php',{operacion:6,dat1:idPreg,dat2:JSON.stringify(listaTags)},function(){
+	$.post('php/insertXML.php',{operacion:6,dat1:idPreg,dat2:JSON.stringify(listaTags),dat3:localStorage.idUser},function(){
 		window.location.replace('administrarPregunta.html');
 	},'');
 
@@ -375,7 +375,7 @@ function editarPregSimple(){
 		
 			
 			
-			var envio = 'operacion=1&dat1='+idPreg+'&dat2='+urlPreg+'&dat3='+encodeURIComponent(xml)+'&dat4='+JSON.stringify(listaTags)+'&dat5='+titulo;	//	alert(envio);
+			var envio = 'operacion=1&dat1='+idPreg+'&dat2='+urlPreg+'&dat3='+encodeURIComponent(xml)+'&dat4='+JSON.stringify(listaTags)+'&dat5='+titulo+'&dat6='+localStorage.idUser;	//	alert(envio);
 			
 			
 			
