@@ -49,7 +49,7 @@ $Letters= array('A','B','C','D','E','F','G','H','I','J','K','L','M','Ñ','O','P'
 
 function generarWord($dataPrueba,$dataPregunta,$respuestas){
 header("Content-type: application/vnd.ms-word");
-header("Content-Disposition: attachment;Filename=prueba_".$dataPrueba.".doc");
+header("Content-Disposition: attachment;Filename=prueba_.doc");
 	echo "<html>";
 	echo "<meta http-equiv=\'Content-Type\'' content=\'text/html; charset='UTF-8'>";
 	echo "<body>";

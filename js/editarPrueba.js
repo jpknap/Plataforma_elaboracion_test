@@ -7,8 +7,13 @@ $(function()
 	{
 	//$.post('php/cargarPreguntas.php',{operacion:0,dat1:1,dat2:'',dat3:JSON.stringify(listaTags),dat4:localStorage.idUser } ,procesarLecturaXML,'json');
 	//carga de prueba	
+
+	if(sessionStorage['idPruebaEdit'] ==undefined){
+		window.location.replace('administrarPrueba.html');
+	}
 	idPrueba = sessionStorage['idPruebaEdit'];
-	//sessionStorage.removeItem('idPruebaEdit');
+	sessionStorage.removeItem('idPruebaEdit');
+
 	$.post('php/prueba.php',{operacion:4,dat1:''+idPrueba},function(data){
 			 var codeTags='';
 			 $.each(data, function(name, info){
@@ -53,6 +58,18 @@ function mensajeError(texto){
 };
 //generacion de prueba 
 function generarPrueba(){
+		var titulo = $("#tituloPregunta").val();
+		if(titulo == "" || titulo ==" "){
+			mensajeError("Debes ingresar un titulo a la prueba");
+			return false;
+		}
+		if(listaPreguntas.length < 1){
+			mensajeError("Debes ingresar almenos una pregunta");
+			return false;
+		}
+		generarP();
+}
+function generarP(){
 	cargarLoading();
 	var titulo =$("#tituloPregunta").val();
 	var descripcion= $("#idTextoAdicional").val();
@@ -139,7 +156,7 @@ function asignarPregunta(titulo,id, url){
 	var result = $.grep(listaPreguntas, function(e){ return e.id == id; });
 	if(result.length == 0){
 		listaPreguntas.push({id:id,titulo: titulo, url:url});
-		$("#preguntasAsig").append('<div style="background-color:yellow; margin-top:4px; height: 45px; width: 100%;"> <snap style=" margin-left:7px;  width:110px; float:left; ">'+decodeURI(titulo).substring(0,15)+'</snap> <a  style="cursor:pointer; margin-top:10px; float:left;" onClick=cargarVelo("'+url+'");><img height="25" width="25" src="images/lupa.png"> </img></a> <button style=" margin-left:5px;  margin-top:10px;float:left;" onclick=quitarPregunta('+(listaPreguntas.length-1)+')> X </button> </div>');
+		$("#preguntasAsig").append('<div style="background-color:#8CCC96; margin-top:4px; height: 45px; width: 100%;"> <snap style=" margin-left:7px;  width:110px; float:left; ">'+decodeURI(titulo).substring(0,15)+'</snap> <a  style="cursor:pointer; margin-top:10px; float:left;" onClick=cargarVelo("'+url+'");><img height="25" width="25" src="images/lupa.png"> </img></a> <button style=" margin-left:10px;margin-top:2px;float:left;" onclick=quitarPregunta('+(listaPreguntas.length-1)+') class="button_rojo"> X </button> </div>');
 	}
 	else{
 		console.log("no se puede repetir pregunta");
@@ -150,14 +167,14 @@ function quitarPregunta(posPregunta){
 	listaPreguntas.splice(posPregunta,1);
 	codePreguntaList ='';
 	for(var i =0 ;i<listaPreguntas.length ; i++){
-	 codePreguntaList+= '<div style="background-color:yellow; margin-top:4px; height: 45px; width: 100%;"> <snap style=" margin-left:7px;  width:110px; float:left; ">'+decodeURI(listaPreguntas[i].titulo).substring(0,15)+'</snap> <a  style="cursor:pointer; margin-top:10px; float:left;" onClick=cargarVelo("'+listaPreguntas[i].url+'");><img height="25" width="25" src="images/lupa.png"> </img></a> <button style=" margin-left:5px; margin-top:10px;float:left;" onclick="quitarPregunta('+i+')" > X </button> </div>';
+	 codePreguntaList+= '<div style="background-color:#8CCC96; margin-top:4px; height: 45px; width: 100%;"> <snap style=" margin-left:7px;  width:110px; float:left; ">'+decodeURI(listaPreguntas[i].titulo).substring(0,15)+'</snap> <a  style="cursor:pointer; margin-top:10px; float:left;" onClick=cargarVelo("'+listaPreguntas[i].url+'");><img height="25" width="25" src="images/lupa.png"> </img></a> <button style=" margin-left:10px; margin-top:2px ;float:left;" onclick="quitarPregunta('+i+')" class="button_rojo" > X </button> </div>';
 	}
 	$("#preguntasAsig").html(codePreguntaList)
 }
 function reloadPregunta(){
 	codePreguntaList ='';
 	for(var i =0 ;i<listaPreguntas.length ; i++){
-	 codePreguntaList+= '<div style="background-color:yellow; margin-top:4px; height: 45px; width: 100%;"> <snap style=" margin-left:7px;  width:110px; float:left; ">'+decodeURI(listaPreguntas[i].titulo).substring(0,15)+'</snap> <a  style="cursor:pointer; margin-top:10px; float:left;" onClick=cargarVelo("'+listaPreguntas[i].url+'");><img height="25" width="25" src="images/lupa.png"> </img></a> <button style=" margin-left:5px; margin-top:10px;float:left;" onclick="quitarPregunta('+i+')" > X </button> </div>';
+	 codePreguntaList+= '<div style="background-color:#8CCC96; margin-top:4px; height: 45px; width: 100%;"> <snap style=" margin-left:7px;  width:110px; float:left; ">'+decodeURI(listaPreguntas[i].titulo).substring(0,15)+'</snap> <a  style="cursor:pointer; margin-top:10px; float:left;" onClick=cargarVelo("'+listaPreguntas[i].url+'");><img height="25" width="25" src="images/lupa.png"> </img></a> <button style=" margin-left:10px; margin-top:2px ;float:left;" onclick="quitarPregunta('+i+')" class="button_rojo" > X </button> </div>';
 	}
 	$("#preguntasAsig").html(codePreguntaList)
 }

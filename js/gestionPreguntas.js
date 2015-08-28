@@ -89,21 +89,7 @@ function removerTag(posTag){
 	}
 	$("#listaTags").html(codeTags)
 }
-function compartirPreg(element,id){
-		$.post('php/insertXML.php',{operacion:2,dat1:id},function(data){
-			$(element).replaceWith("<h3><b>"+data+"</b></h3>");
-			$('#edit'+id).removeAttr( "onClick" );
-			$('#edit'+id).removeAttr( "style" );
-			$('#editImg'+id).css({"opacity":"0.5","filter":"alpha(opacity=50)"});	
-			$('#preview'+id).prop( "onClick", null );			
-			$('#preview'+id).attr('onClick','cargarVelo("xmlPreguntas/'+data+'.xml")');
 
-
-
-		},'text');
-
-	
-}
 
 function procesarLecturaXML(data){
 		var preguntas="<tr><th>Titulo</th><th>Preview</th><th>Editar</th><th>compartir</th><th>Eliminar</th></tr>";
@@ -201,6 +187,7 @@ function eliminarPregunta(id){
   });
 }
 function eliminarPregunta(id){
+			$("#notificacion_top_confirmar_cambios p").text("Estas seguro que deseas eliminar esta pregunta, este cambio no se puede revertir (esta pregunta no sera eliminada de las pruebas que la contengan):");
 		$("#notificacion_top_confirmar_cambios").show(500);
 		var color = $("#row"+id).css("background-color");
 		$("#row"+id).css("background-color","#FD94AC");
@@ -214,6 +201,35 @@ function eliminarPregunta(id){
 	    	mensajeError(""+XMLHttpRequest.responseText);
 		  
 			});
+		});
+		$( "#Cancelar" ).click(function() {		  
+		  $("#row"+id).css("background-color",color);
+		  $('#Guardar').off('click');
+		  $('#Cancelar').off('click');
+		  $("#notificacion_top_confirmar_cambios").hide(500);
+		
+		});
+}
+function compartirPreg(element,id){
+
+		$("#notificacion_top_confirmar_cambios p").text("Esta seguro que desea compartir esta pregunta, esta accion no se puede revertir y no podra seguir editando la pregunta");
+		$("#notificacion_top_confirmar_cambios").show(500);
+		var color = $("#row"+id).css("background-color");
+		$("#row"+id).css("background-color","#1DA1F3");
+		$( "#Guardar" ).click(function() {
+			$('#Guardar').off('click');
+			$('#Cancelar').off('click');
+			$("#notificacion_top_confirmar_cambios").hide(500);
+			
+		  $("#row"+id).css("background-color",color);
+			$.post('php/insertXML.php',{operacion:2,dat1:id},function(data){
+				$(element).replaceWith("<h3><b>"+data+"</b></h3>");
+				$('#edit'+id).removeAttr( "onClick" );
+				$('#edit'+id).removeAttr( "style" );
+				$('#editImg'+id).css({"opacity":"0.5","filter":"alpha(opacity=50)"});	
+				$('#preview'+id).prop( "onClick", null );			
+				$('#preview'+id).attr('onClick','cargarVelo("xmlPreguntas/'+data+'.xml")');
+			},'text');
 		});
 		$( "#Cancelar" ).click(function() {		  
 		  $("#row"+id).css("background-color",color);

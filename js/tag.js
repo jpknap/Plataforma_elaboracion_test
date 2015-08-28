@@ -17,7 +17,11 @@ function mensajeError(texto){
 };
 function agregarTag(){
 	if($('#nombreAgregar').val()!="" && $('#nombreAgregar').val()!=" " ){
-		$.post('php/tag.php',{operacion:0,dat1:''+$('#nombreAgregar').val(),dat2:''+$('#tipoAgregar').val(), dat3:localStorage.idUser},'').done(function(){cargarTag(paginaActual)});
+		$.post('php/tag.php',{operacion:0,dat1:''+$('#nombreAgregar').val(),dat2:''+$('#tipoAgregar').val(), dat3:localStorage.idUser},'').done(function(){
+	if(!$("#notificacion_top_ok").is(':visible')){
+		$("#notificacion_top_ok").show(500).delay(1000).fadeOut();
+	}
+			cargarTag(paginaActual)});
 		$('#nombreAgregar').val('');
 	}
 	else{
@@ -26,6 +30,7 @@ function agregarTag(){
 
 };
 function cargarTag(pag){
+
 	ultimoNombreBusqueda=$('#nombreBusqueda').val();
 	ultimoTipoBusqueda=$('#tipoBusqueda').val();
 	paginaActual=pag;
