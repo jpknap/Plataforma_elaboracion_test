@@ -1141,6 +1141,16 @@ a:visited {
   top: 0;
   width: 100%;
   z-index: 999; }
+#notificacion_edicion {
+  color: white;
+  display: none;
+  font-size: 14px;
+  padding: 20px 0;
+  position: fixed;
+  text-align: center;
+  top: 0;
+  width: 100%;
+  z-index: 999; }
 
 #notificacion_top_ok {
   background-color: #36b76a; }
@@ -1151,6 +1161,11 @@ a:visited {
 #notificacion_top_confirmar_cambios {
   background-color: #477cad; }
   #notificacion_top_confirmar_cambios .botones_de_accion {
+    margin-left: 10px; }
+
+#notificacion_edicion {
+  background-color: #477cad; }
+  #notificacion_edicion .botones_de_accion {
     margin-left: 10px; }
 
 .botones_de_accion {

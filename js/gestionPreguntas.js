@@ -202,11 +202,15 @@ function eliminarPregunta(id){
   });
 }
 function eliminarPregunta(id){
+			$("table button").attr("disabled","true");
+
+		$("#notificacion_top_confirmar_cambios").hide(500);
 			$("#notificacion_top_confirmar_cambios p").text("Estas seguro que deseas eliminar esta pregunta, este cambio no se puede revertir (esta pregunta no sera eliminada de las pruebas que la contengan):");
 		$("#notificacion_top_confirmar_cambios").show(500);
 		var color = $("#row"+id).css("background-color");
 		$("#row"+id).css("background-color","#FD94AC");
 		$( "#Guardar" ).click(function() {
+			$("table button").removeAttr('disabled');
 			$('#Guardar').off('click');
 			$('#Cancelar').off('click');
 			$("#notificacion_top_confirmar_cambios").hide(500);
@@ -218,6 +222,7 @@ function eliminarPregunta(id){
 			});
 		});
 		$( "#Cancelar" ).click(function() {		  
+		$("table button").removeAttr('disabled');
 		  $("#row"+id).css("background-color",color);
 		  $('#Guardar').off('click');
 		  $('#Cancelar').off('click');
@@ -226,12 +231,16 @@ function eliminarPregunta(id){
 		});
 }
 function compartirPreg(element,id){
+	$("table button").attr("disabled","true");
 
+		$("#notificacion_top_confirmar_cambios").hide(500);
 		$("#notificacion_top_confirmar_cambios p").text("Esta seguro que desea compartir esta pregunta, esta accion no se puede revertir y no podra seguir editando la pregunta");
 		$("#notificacion_top_confirmar_cambios").show(500);
 		var color = $("#row"+id).css("background-color");
 		$("#row"+id).css("background-color","#1DA1F3");
 		$( "#Guardar" ).click(function() {
+
+			$("table button").removeAttr('disabled');
 			$('#Guardar').off('click');
 			$('#Cancelar').off('click');
 			$("#notificacion_top_confirmar_cambios").hide(500);
@@ -246,7 +255,9 @@ function compartirPreg(element,id){
 				$('#preview'+id).attr('onClick','cargarVelo("xmlPreguntas/'+data+'.xml")');
 			},'text');
 		});
-		$( "#Cancelar" ).click(function() {		  
+		$( "#Cancelar" ).click(function() {		
+		
+			$("table button").removeAttr('disabled'); 
 		  $("#row"+id).css("background-color",color);
 		  $('#Guardar').off('click');
 		  $('#Cancelar').off('click');

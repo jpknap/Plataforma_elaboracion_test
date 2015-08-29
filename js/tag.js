@@ -1,5 +1,6 @@
 var paginaActual=1;
 var idTagEliminar=-1;
+var colorEliminar="";
 var ultimoNombreBusqueda='';
 var ultimoTipoBusqueda='';
 $(document).ready(function()
@@ -17,11 +18,14 @@ function mensajeError(texto){
 };
 function agregarTag(){
 	if($('#nombreAgregar').val()!="" && $('#nombreAgregar').val()!=" " ){
-		$.post('php/tag.php',{operacion:0,dat1:''+$('#nombreAgregar').val(),dat2:''+$('#tipoAgregar').val(), dat3:localStorage.idUser},'').done(function(){
-	if(!$("#notificacion_top_ok").is(':visible')){
-		$("#notificacion_top_ok").show(500).delay(1000).fadeOut();
-	}
-			cargarTag(paginaActual)});
+	$.post('php/tag.php',{operacion:0,dat1:''+$('#nombreAgregar').val(),dat2:''+$('#tipoAgregar').val(), dat3:localStorage.idUser},function(){
+		if(!$("#notificacion_top_ok").is(':visible')){
+			$("#notificacion_top_ok").show(500).delay(1000).fadeOut();
+		}
+	cargarTag(paginaActual)},'').fail(function(XMLHttpRequest, textStatus, errorThrown) {
+		mensajeError(""+XMLHttpRequest.responseText);
+		});
+
 		$('#nombreAgregar').val('');
 	}
 	else{
@@ -29,6 +33,44 @@ function agregarTag(){
 	}
 
 };
+function editarTag(id,tipo){
+		$("table button").attr("disabled","true");
+		$("#notificacion_edicion").show(500);
+		var color = $("#row"+id).css("background-color");
+		$("#row"+id).css("background-color","#1DA1F3");
+		$( "#GuardarEdicion" ).click(function() {
+		var nombre = $("#nombreEdicion").val();
+		 $("#nombreEdicion").val("");
+		if(nombre != ""){
+			$.post('php/tag.php',{operacion:4,dat1:id ,dat2:nombre, dat3:tipo,dat4:localStorage.idUser},function(){
+					if(!$("#notificacion_top_ok").is(':visible')){
+						$("#notificacion_top_ok").show(500).delay(1000).fadeOut();
+					}
+				cargarTag(paginaActual)},'').fail(function(XMLHttpRequest, textStatus, errorThrown) {
+					mensajeError(""+XMLHttpRequest.responseText);
+					});
+			}
+			else{
+				mensajeError("No puedes agregar un tag con nombre vacio");
+
+			}
+
+			$("table button").removeAttr('disabled');
+			$('#GuardarEdicion').off('click');
+			$('#CancelarEdicion').off('click');
+			$("#notificacion_edicion").hide(500);			
+		 	$("#row"+id).css("background-color",color);
+		
+		});
+		$( "#CancelarEdicion" ).click(function() {	
+
+		  $("table button").removeAttr('disabled');	  
+		  $("#row"+id).css("background-color",color);
+		  $('#GuardarEdicion').off('click');
+		  $('#CancelarEdicion').off('click');
+		  $("#notificacion_edicion").hide(500);		
+		});
+}
 function cargarTag(pag){
 
 	ultimoNombreBusqueda=$('#nombreBusqueda').val();
@@ -38,16 +80,20 @@ function cargarTag(pag){
 
 };
 function confirmarAccionTag(idEliminar,nombre){
+			$("table button").attr("disabled","true");
+
+	colorEliminar = $("#row"+idEliminar).css("background-color");
+	$("#row"+idEliminar).css("background-color","#FD94AC");
 	$("#notificacion_top_confirmar_cambios snap").text("Estas seguro que deseas elimnar el tag : "+decodeURI(nombre)+", esta accion no se podra deshacer:");
 	$("#notificacion_top_confirmar_cambios").show(500);
 	idTagEliminar=idEliminar;
 };
 
 function procesarLecturaTag(data){
-		var preguntas="<tr><th>Nombre</th><th>Eliminar</th></tr>";
+		var preguntas="<tr><th>Nombre</th><th>Tipo</th><th>Editar</th><th>Eliminar</th></tr>";
 		 $.each(data, function(name, info){
 		 	if(name != 'cantidad'){
-		 		preguntas +='<tr> <td>'+info.nombre+'</td><td><button onClick=confirmarAccionTag('+info.id+',"'+encodeURI(info.nombre)+'"); class="button_rojo">'+"Eliminar"+'</button></td> </tr>';
+		 		preguntas +='<tr id="row'+info.id+'"> <td>'+info.nombre+'</td><td>'+info.tipo+'</td><td><button class="button_azul" onClick=editarTag('+info.id+',"'+info.tipo+'");>Editar</button></td><td><button onClick=confirmarAccionTag('+info.id+',"'+encodeURI(info.nombre)+'"); class="button_rojo">'+"Eliminar"+'</button></td> </tr>';
 		 	}
 		 	else{
 		 		paginador(info.value);
@@ -56,11 +102,16 @@ function procesarLecturaTag(data){
 		 $("#tablaTags").html(preguntas);
 };
 function deshacerEliminar(){
+
+	$("table button").removeAttr('disabled');	 
+	$("#row"+idTagEliminar).css("background-color",colorEliminar);
 	idTagEliminar=-1;
 	$("#notificacion_top_confirmar_cambios").hide(500);
 }
 function eliminar(){
 
+	$("table button").removeAttr('disabled');	 
+	$("#row"+idTagEliminar).css("background-color",colorEliminar);
 	$("#notificacion_top_confirmar_cambios").hide(100);
 	$.post('php/tag.php',{operacion:2,dat1:''+idTagEliminar},'').done(function(){cargarTag(paginaActual)});
 }

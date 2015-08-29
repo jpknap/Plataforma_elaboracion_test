@@ -10,12 +10,12 @@ function login($user, $pass){
 		global $conexion;
 		$data= array();
 		$data[0]=array("id"=>'-1');
-		$sql_id = 'SELECT id FROM usuario WHERE email="'.$user.'" AND password="'.$pass.'"';
+		$sql_id = 'SELECT id as id, nombre as nombre, apellido as apellido FROM usuario WHERE email="'.$user.'" AND password="'.$pass.'"';
 		
 		
 		$query = mysql_query($sql_id,$conexion);	
 		while ($row = mysql_fetch_assoc($query, MYSQL_ASSOC)) {
-			$data[0]=array("id"=>$row['id']);
+			$data[0]=array("id"=>$row['id'],"nombre"=>$row['nombre'],"apellido"=>$row['apellido']);
 		}
 		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 		header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Fecha en el pasado

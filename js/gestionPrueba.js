@@ -17,11 +17,14 @@ $(document).ready(function()
 
 });
 function eliminarPrueba(idPrueba){
+		$("table button").attr("disabled","true");
+
 		$("#notificacion_top_confirmar_cambios").show(500);
 		var color = $("#row"+idPrueba).css("background-color");
 		$("#row"+idPrueba).css("background-color","#FD94AC");
 		$( "#Guardar" ).click(function() {
-		  console.log( "Handler for .click() called." );
+						$("table button").removeAttr('disabled');
+
 		  $('#Guardar').off('click');
 		  $('#Cancelar').off('click');
 		  $("#row"+idPrueba).remove();
@@ -29,7 +32,9 @@ function eliminarPrueba(idPrueba){
 		$.post('php/prueba.php',{operacion:8,dat1:idPrueba},'','');
 		  
 		});
-		$( "#Cancelar" ).click(function() {		  
+		$( "#Cancelar" ).click(function() {	
+					$("table button").removeAttr('disabled');
+	  
 		  $("#row"+idPrueba).css("background-color",color);
 		  $('#Guardar').off('click');
 		  $('#Cancelar').off('click');
