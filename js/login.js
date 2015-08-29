@@ -25,7 +25,7 @@ function procesarRespuesta(data) {
 				window.location.href = 'menu.html';
 			}
 			else{
-				console.log("error logeo");
+				$("#notificacion_top_error").show(500).delay(1000).hide(500);
 			}
 			 
 			}
