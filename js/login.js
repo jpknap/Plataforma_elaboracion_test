@@ -1,5 +1,7 @@
 $(function(){
-	if(localStorage.idUser != null || localStorage.idUser != undefined){
+	localStorage.removeItem("idUser");
+	if(sessionStorage.idUser != null || sessionStorage.idUser != undefined){
+		localStorage.idUser =sessionStorage.idUser;
 		window.location.href="menu.html";
 	}
 });
@@ -19,9 +21,10 @@ function procesarRespuesta(data) {
 		 });
 		 if (window.localStorage) {
  			if (id != -1){
-				localStorage.idUser = id;
-				localStorage.nombre = nombre;
-				localStorage.apellido = apellido;
+				sessionStorage.idUser = id;
+				sessionStorage.nombre = nombre;
+				sessionStorage.apellido = apellido;
+				$("#submit_button").click()
 				window.location.href = 'menu.html';
 			}
 			else{

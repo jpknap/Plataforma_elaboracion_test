@@ -26,7 +26,7 @@
           <div id='version'>
             Plataforma de generacion de preguntas y test v1.0
           </div>
-          <img id='logo'  WIDTH=150 HEIGHT=50  src='images/logo_gita.png'>
+          <img id='logo'  WIDTH="150" HEIGHT="50"  src='images/logo_gita.png'>
         </div>
         <p id='titulo_login'>
           Plataforma de generacion de preguntas y test bajo estandar MSI-QTI
@@ -39,17 +39,19 @@
         <h1>
           Login
         </h1>
-        <form>
+        <iframe name="my_iframe" src="about:blank" hidden></iframe>
+        <form target="my_iframe" action="about:blank" method="get"  autocomplete="on">
           <p>
             Ingresar usuario:
           </p>
-          <input id="userName" placeholder='Usuario' type='text'>
+          <input id="userName" placeholder='email' type='text' autocomplete="on"/>
+
           <p>
             Ingresar contraseña:
           </p>
           <input id="password" placeholder='Contraseña' type='password'>
-         
-          <button type="button" id="botonIngresar" onClick="identificar()">
+          <button type="submit" id="submit_button" hidden></button>
+          <button id="botonIngresar" onClick="identificar()">
             Ingresar
           </button>
         
