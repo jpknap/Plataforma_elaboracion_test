@@ -1,5 +1,8 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 @import url(http://fonts.googleapis.com/css?family=Roboto);
+body{
+  word-wrap: break-word;
+}
 #velo {
   background-color: rgba(226, 230, 234, 0.8);
   display: none;

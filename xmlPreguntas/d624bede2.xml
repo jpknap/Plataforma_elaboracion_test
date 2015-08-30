@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<assessmentItem adaptive="false" timeDependent="false" label="mylabel" title="mi segunda pregunta" identifier="choice" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd" xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:lip="http://www.imsglobal.org/xsd/imslip_v1p0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Matd/MatdML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<assessmentItem adaptive="false" timeDependent="false" label="mylabel" title="pregunta user" identifier="choice" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd" xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:lip="http://www.imsglobal.org/xsd/imslip_v1p0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Matd/MatdML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="identifier">
       <correctResponse>
-         <value>C</value>
+         <value>A</value>
       </correctResponse>
       <mapping defaultValue="0">
          <mapEntry mapKey="A" mappedValue="1" />
          <mapEntry mapKey="B" mappedValue="1" />
-         <mapEntry mapKey="C" mappedValue="1" />
-         <mapEntry mapKey="D" mappedValue="1" />
       </mapping>
    </responseDeclaration>
    <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float" />
    <itemBody>
-      <p class="">esto&#160;es&#160;texto&#160;adicional</p>
+      <p class="">Same idea, except letting the breaks happen with CSS only. Wrap each line in a &lt;span&gt; with a class of rwd-line and set that class to display: block;, then swap to display: inline; for the wider layouts. I don’t really see why you’d use the first technique over </p>
       <choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1">
-         <prompt>pregunta&#160;z</prompt>
-         <simpleChoice fixed="false" identifier="A">x</simpleChoice>
-         <simpleChoice fixed="false" identifier="B">d</simpleChoice>
-         <simpleChoice fixed="false" identifier="C">z</simpleChoice>
-         <simpleChoice fixed="false" identifier="D">s</simpleChoice>
+         <prompt>Same&#160;idea,&#160;except&#160;letting&#160;the&#160;breaks&#160;happen&#160;with&#160;CSS&#160;only.&#160;Wrap&#160;each&#160;line&#160;in&#160;a&#160;&lt;span&gt;&#160;with&#160;a&#160;class&#160;of&#160;rwd-line&#160;and&#160;set&#160;that&#160;class&#160;to&#160;display:&#160;block;,&#160;then&#160;swap&#160;to&#160;display:&#160;inline;&#160;for&#160;the&#160;wider&#160;layouts.&#160;I&#160;don’t&#160;really&#160;see&#160;why&#160;you’d&#160;use&#160;the&#160;first&#160;technique&#160;over&#160;</prompt>
+         <simpleChoice fixed="false" identifier="A">1</simpleChoice>
+         <simpleChoice fixed="false" identifier="B">3</simpleChoice>
       </choiceInteraction>
    </itemBody>
    <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_response" />

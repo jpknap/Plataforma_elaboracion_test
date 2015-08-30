@@ -19,10 +19,10 @@ $(document).ready(function()
 
 function cargarPregCompartida(){
 	var code = $("#codePregunta").val();
-	$.post('php/insertXML.php',{operacion:3,dat1:code} ,cargaPregCompartida,'json');
+	$.post('php/insertXML.php',{operacion:3,dat1:code} ,cargaPregCompartidaTabla,'json');
 
 }
-function cargaPregCompartida(data){
+function cargaPregCompartidaTabla(data){
 		var preguntas="<tr><th>Titulo</th><th>Preview</th><th>Asignar</th></tr>";
 		 $.each(data, function(name, info){
 		 	preguntas +='<tr> <td>'+info.titulo+'</td><td><a  style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td> <button class="button_azul" onClick="asignarPreg('+info.id+')">Asignar</button></td> </tr>';
@@ -188,7 +188,12 @@ function mensajeError(texto){
 	}
 };
 function asignarPreg(id){
-	$.post('php/insertXML.php',{operacion:4,dat1:id,dat2:localStorage.idUser},'','text').fail(function(XMLHttpRequest, textStatus, errorThrown) {
+	$.post('php/insertXML.php',{operacion:4,dat1:id,dat2:localStorage.idUser},function(){
+		$("#notificacion_top_ok").text("La pregunta se ha agregado correctamente a tu lista");
+		$("#notificacion_top_ok").show(300).delay(1000).hide(300);
+	    $.post('php/cargarPreguntas.php',{operacion:0,dat1:1,dat2:tituloBuscar,dat3:JSON.stringify(listaTags),dat4:localStorage.idUser,dat5:orden },procesarLecturaXML,'json');
+
+	},'text').fail(function(XMLHttpRequest, textStatus, errorThrown) {
     mensajeError(""+XMLHttpRequest.responseText);
 
   });
@@ -248,9 +253,8 @@ function compartirPreg(element,id){
 		  $("#row"+id).css("background-color",color);
 			$.post('php/insertXML.php',{operacion:2,dat1:id},function(data){
 				$(element).replaceWith("<h3><b>"+data+"</b></h3>");
-				$('#edit'+id).removeAttr( "onClick" );
-				$('#edit'+id).removeAttr( "style" );
-				$('#editImg'+id).css({"opacity":"0.5","filter":"alpha(opacity=50)"});	
+				$('#edit'+id).prop( "onClick", null );		
+				$('#edit'+id).attr( 'onClick','editarPreg("'+id+'","xmlPreguntas/'+data+'.xml","1")');
 				$('#preview'+id).prop( "onClick", null );			
 				$('#preview'+id).attr('onClick','cargarVelo("xmlPreguntas/'+data+'.xml")');
 			},'text');

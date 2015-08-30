@@ -112,6 +112,14 @@ include "conexionBD.php";
 		}
 		function asignarPregunta($id, $idUser){
 			global $conexion;
+			$sql= "SELECT * FROM pregunta_user WHERE id_usuario = ".$idUser." AND id_pregunta = ".$id." AND eliminada = 0;";
+			$num = mysql_num_rows(mysql_query($sql,$conexion));
+			if ($num > 0) {
+					header("HTTP/1.0 404 Not Found");
+					echo "Error : Esta pregunta ya la tienes en tu lista de preguntas";
+					die();
+			}
+
 			$sql_id = 'INSERT INTO pregunta_user (id_usuario,id_pregunta,eliminada, fechaUltima) VALUES ('.$idUser.','.$id.',0,"'.date("Y-m-d").'");';  // <---- OJO! 
 			if(!mysql_query($sql_id,$conexion)){
 
@@ -122,7 +130,7 @@ include "conexionBD.php";
 					die();
 			};
 				die();
-			};
+			};			
 			mysql_close($conexion);
 		
 		}
