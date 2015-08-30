@@ -51,9 +51,7 @@ function editarTag($id,$nombre,$tipo,$idUser){
 			die();
 	}
 	else{	
-					$sql2='UPDATE pregunta SET titulo="'.$titulo.'" ,url="xmlPreguntas/'.$id.'.xml'.'" ,compartir=0, extension="xml" ,tipo="SimpleChoice" WHERE id='.$id.';';
-
-		$sql= 'UPDATE tag SET nombre='.$nombre.' WHERE id='.$id.';';
+		$sql= 'UPDATE tag SET nombre="'.$nombre.'" WHERE id='.$id.';';
 		$query = mysql_query($sql,$conexion)or die ("Error in query: $query. ".mysql_error());	
 	}
 
