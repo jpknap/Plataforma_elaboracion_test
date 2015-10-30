@@ -16,6 +16,10 @@ $(document).ready(function()
 
 
 });
+function downloadXML(url){
+		$("#notificacion_top_ok").text("Estas generando una descarga de un pregutan esta se encuentra en formato XML, para que se utilizado por otras plataformas que trabajen con la espesificacion IMS/QTI");
+		$("#notificacion_top_ok").show(300).delay(12000).hide(300);
+}
 
 function cargarPregCompartida(){
 	var code = $("#codePregunta").val();
@@ -107,14 +111,14 @@ function ordenamientoFechas(element){
 
 
 function procesarLecturaXML(data){
-		var preguntas="<tr><th >Titulo</th><th><a onclick='ordenamientoFechas(this)' style='cursor:pointer;'>Fecha <img  height='15' width='20' src="+lastIMGorden+"></img></a></th><th>Preview</th><th>Editar</th><th>compartir</th><th>Eliminar</th></tr>";
+		var preguntas="<tr><th >Titulo</th><th><a onclick='ordenamientoFechas(this)' style='cursor:pointer;'>Fecha <img  height='15' width='20' src="+lastIMGorden+"></img></a></th><th>Preview</th><th>Editar</th><th>Descargar</th><th>Compartir</th><th>Eliminar</th></tr>";
 		 $.each(data, function(name, info){
 		 	if(name != 'cantidad'){
 		 		if(info.compartir==0)
-		 			preguntas +='<tr id="row'+info.id+'"> <td>'+info.titulo+'</td> <td>'+info.fecha+'</td><td><a   id="preview'+info.id+'" style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><a  id="edit'+info.id+'" style="cursor:pointer;" onClick=editarPreg("'+info.id+'","'+info.dirPreg+'",'+info.compartir+');> <img  id="editImg'+info.id+'" height="30" width="30" src="images/edit.png"> </img></a></td> <td> <button class="button_azul" onClick="compartirPreg(this,'+info.id+')">Compartir</button></td><td><button class="button_rojo" onClick="eliminarPregunta('+info.id+')">Eliminar</button></td> </tr>';
+		 			preguntas +='<tr id="row'+info.id+'"> <td style="white-space: nowrap word-wrap: break-word;"><p>'+info.titulo+'</p></td> <td>'+info.fecha+'</td><td><a   id="preview'+info.id+'" style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="35" width="35" src="images/lupa.png"> </img></a></td><td><a  id="edit'+info.id+'" style="cursor:pointer;" onClick=editarPreg("'+info.id+'","'+info.dirPreg+'",'+info.compartir+');> <img  id="editImg'+info.id+'" height="35" width="35" src="images/edit.png"> </img></a></td><td><a  id="download'+info.id+'" onClick="downloadXML()"; style="cursor:pointer;" href="'+info.dirPreg+'" download="pregunta.xml"> <img height="35" width="35" src="images/download.png"> </img></a></td><td> <button class="button_azul" onClick="compartirPreg(this,'+info.id+')">Compartir</button></td> <td><button class="button_rojo" onClick="eliminarPregunta('+info.id+')">Eliminar</button></td> </tr>';
 		 		else
-		 			preguntas +='<tr id="row'+info.id+'"> <td>'+info.titulo+'</td><td>'+info.fecha+'</td><td><a  style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="30" width="30" src="images/lupa.png"> </img></a></td><td><a  id="edit'+info.id+'" style="cursor:pointer;" onClick=editarPreg("'+info.id+'","'+info.dirPreg+'",'+info.compartir+');> <img  id="editImg'+info.id+'" height="30" width="30" src="images/edit.png"> </img></a></td> <td> <h3><b>'+info.codigo+'</b></h3></td><td><button class="button_rojo" onClick="eliminarPregunta('+info.id+')">Eliminar</button></td> </tr>';
 
+		 			preguntas +='<tr id="row'+info.id+'"> <td style="white-space: nowrap word-wrap: break-word;"><p>'+info.titulo+'</p></td><td>'+info.fecha+'</td><td><a  style="cursor:pointer;" onClick=cargarVelo("'+info.dirPreg+'");><img height="35" width="35" src="images/lupa.png"> </img></a></td><td><a  id="edit'+info.id+'" style="cursor:pointer;" onClick=editarPreg("'+info.id+'","'+info.dirPreg+'",'+info.compartir+');> <img  id="editImg'+info.id+'" height="35" width="35" src="images/edit.png"> </img></a></td><td><a  id="download'+info.id+'" onClick="downloadXML()"; style="cursor:pointer;" href="'+info.dirPreg+'" download="pregunta.xml"> <img height="35" width="35" src="images/download.png"> </img></a></td> <td> <h3><b>'+info.codigo+'</b></h3></td><td><button class="button_rojo" onClick="eliminarPregunta('+info.id+')">Eliminar</button></td> </tr>';
 		 	}
 		 	else{
 		 		paginador(info.value);
@@ -257,6 +261,7 @@ function compartirPreg(element,id){
 				$('#edit'+id).attr( 'onClick','editarPreg("'+id+'","xmlPreguntas/'+data+'.xml","1")');
 				$('#preview'+id).prop( "onClick", null );			
 				$('#preview'+id).attr('onClick','cargarVelo("xmlPreguntas/'+data+'.xml")');
+				$('#download'+id).attr('href','xmlPreguntas/'+data+'.xml');
 			},'text');
 		});
 		$( "#Cancelar" ).click(function() {		

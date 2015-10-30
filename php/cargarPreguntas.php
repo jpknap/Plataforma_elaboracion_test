@@ -28,7 +28,7 @@ function cargarPreguntas($hoja,$titulo,$tags,$idUser,$orden){
 		}
 		$data = array();
 		$cant_Hoja=10;
-		$sql_id = 'SELECT a.id as id FROM  pregunta_user z, pregunta a  left JOIN pregunta_tag  on 1 WHERE z.id_usuario='.$idUser.' AND z.id_pregunta = a.id and a.titulo LIKE "%'.$titulo.'%" '.$tagSql.' GROUP BY id '.$tagSql2;  // <---- OJO! 
+		$sql_id = 'SELECT a.id as id FROM  pregunta_user z, pregunta a  left JOIN pregunta_tag  on 1 WHERE z.id_usuario='.$idUser.' AND z.id_pregunta = a.id and  z.eliminada=0  AND a.titulo LIKE "%'.$titulo.'%" '.$tagSql.' GROUP BY id '.$tagSql2;  // <---- OJO! 
 		$query1 = mysql_query($sql_id,$conexion) or die ("Error in query: $query. ".mysql_error());
 		$data['cantidad']=array("value"=>mysql_num_rows($query1));
 

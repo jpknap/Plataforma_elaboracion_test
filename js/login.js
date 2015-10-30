@@ -1,14 +1,18 @@
 $(function(){
-	localStorage.removeItem("idUser");
-	if(sessionStorage.idUser != null || sessionStorage.idUser != undefined){
-		localStorage.idUser =sessionStorage.idUser;
+	if(localStorage.idUser != null || localStorage.idUser != undefined){
+		//localStorage.idUser =sessionStorage.idUser;
 		window.location.href="menu.html";
 	}
 });
 function identificar (){
 	var user = $("#userName").val();
 	var pass = $("#password").val();
-	$.post('php/user.php',{operacion:0,dat1:user ,dat2: pass},procesarRespuesta,'json');
+
+	if(localStorage.idUser == null || localStorage.idUser == undefined)
+		$.post('php/user.php',{operacion:0,dat1:user ,dat2: pass},procesarRespuesta,'json');
+
+	else
+			window.location.href="index.html";
 }
 function procesarRespuesta(data) {
 		var id;
@@ -21,9 +25,10 @@ function procesarRespuesta(data) {
 		 });
 		 if (window.localStorage) {
  			if (id != -1){
-				sessionStorage.idUser = id;
-				sessionStorage.nombre = nombre;
-				sessionStorage.apellido = apellido;
+				localStorage.idUser = id;
+				localStorage.nombre = nombre;
+				localStorage.apellido = apellido;
+				localStorage.page = 1;
 				$("#submit_button").click()
 				window.location.href = 'menu.html';
 			}
@@ -35,6 +40,6 @@ function procesarRespuesta(data) {
 		else {
 		  console.log('Tu Browser no soporta LocalStorage!');
 		}
-
+	
 		
 }

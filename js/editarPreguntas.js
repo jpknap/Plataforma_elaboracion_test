@@ -272,6 +272,7 @@ function editarPregSimple(){
 
 
 			//transformacion de caracteres especiales
+			titulo = remplazarCaracteresEspeciales(titulo);
 			pregunta = remplazarCaracteresEspeciales(pregunta);
 			textoAdicional = remplazarCaracteresEspeciales(textoAdicional);
 		
@@ -375,7 +376,7 @@ function editarPregSimple(){
 		
 			
 			
-			var envio = 'operacion=1&dat1='+idPreg+'&dat2='+urlPreg+'&dat3='+encodeURIComponent(xml)+'&dat4='+JSON.stringify(listaTags)+'&dat5='+titulo+'&dat6='+localStorage.idUser;	//	alert(envio);
+			var envio = 'operacion=1&dat1='+idPreg+'&dat2='+urlPreg+'&dat3='+encodeURIComponent(xml)+'&dat4='+JSON.stringify(listaTags)+'&dat5='+encodeURIComponent(titulo)+'&dat6='+localStorage.idUser;	//	alert(envio);
 			
 			
 			

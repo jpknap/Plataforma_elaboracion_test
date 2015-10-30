@@ -68,3 +68,48 @@
 .tag:hover::after {
    border-left-color: #e95d3c; 
 }
+
+.tagMenu {
+  font-size: 20px;
+  background: #0099cc;
+  border-radius: 3px 0 0 3px;
+  color: #FFFFFF;
+  display: inline-block;
+  height: 26px;
+  line-height: 26px;
+  padding: 0 20px 0 23px;
+  position: relative;
+  margin: 0 10px 10px 0;
+  text-decoration: none;
+  -webkit-transition: color 0.2s;
+}
+
+
+.tagMenu::after {
+  background: #fff;
+  border-bottom: 13px solid transparent;
+  border-left: 10px solid #0099cc;
+  border-top: 13px solid transparent;
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.tagMenu:hover {
+  background-color: #0099cc;
+  cursor:pointer;
+  
+
+}
+
+.tagMenu:hover::after { 
+ background: #fff;
+  border-bottom: 13px solid transparent;
+  border-left: 10px solid #0099cc;
+  border-top: 13px solid transparent;
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+}

@@ -75,7 +75,7 @@ function generarP(){
 	cargarLoading();
 	var titulo =$("#tituloPregunta").val();
 	var descripcion= $("#idTextoAdicional").val();
-	$.post('php/prueba.php',{operacion:7,dat1:localStorage.idUser,dat2:titulo,dat3:descripcion,dat4:JSON.stringify(listaTags),dat5:JSON.stringify(listaPreguntas),dat6:""+idPrueba },function(){
+	$.post('php/prueba.php',{operacion:7,dat1:localStorage.idUser,dat2:encodeURIComponent(titulo),dat3:encodeURIComponent(descripcion),dat4:JSON.stringify(listaTags),dat5:JSON.stringify(listaPreguntas),dat6:""+idPrueba },function(){
 	  location.href = 'administrarPrueba.html';},'');
 }
 //fin funciones generacion de prueba

@@ -135,6 +135,7 @@ function generarXMLSimpleChoice(){
 
 
 			//transformacion de caracteres especiales
+			titulo = remplazarCaracteresEspeciales(titulo);
 			pregunta = remplazarCaracteresEspeciales(pregunta);
 			textoAdicional = remplazarCaracteresEspeciales(textoAdicional);
 		
@@ -238,7 +239,7 @@ function generarXMLSimpleChoice(){
 		
 			
 			
-			var envio = 'operacion=0&dat1='+encodeURIComponent(xml)+'&dat2='+titulo+'&dat3='+JSON.stringify(listaTags)+'&dat4='+localStorage.idUser;	//	alert(envio);
+			var envio = 'operacion=0&dat1='+encodeURIComponent(xml)+'&dat2='+encodeURIComponent(titulo)+'&dat3='+JSON.stringify(listaTags)+'&dat4='+localStorage.idUser;	//	alert(envio);
 			
 			
 			
